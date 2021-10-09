@@ -1,10 +1,14 @@
 import React from 'react';
 import Branch from "./boards/branch";
+import { join } from 'path'
+
+const config: {commands: string[]} = require(join(process.cwd(), './dashboar-config'));
 
 const DashBoards = () => {
 	return <>
-		<Branch command={'ls'}/>
-		<Branch command={'git status'}/>
+		{
+			config.commands.map(command => <Branch key={command} command={command}/> )
+		}
 	</>
 };
 
