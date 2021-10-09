@@ -1,11 +1,17 @@
-import React, {FC} from 'react';
-import {Text} from 'ink';
+import React from 'react';
+import Branch from "./boards/branch";
+import { join } from 'path'
 
-const App: FC<{name?: string}> = ({name = 'Stranger'}) => (
-	<Text>
-		Hello, <Text color="green">{name}</Text>
-	</Text>
-);
+const config: {commands: string[]} = require(join(process.cwd(), './dashboar-config'));
 
-module.exports = App;
-export default App;
+const DashBoards = () => {
+	return <>
+		{
+			config.commands.map(command => <Branch key={command} command={command}/> )
+		}
+	</>
+};
+
+
+module.exports = DashBoards;
+export default DashBoards;
