@@ -1,5 +1,5 @@
 module.exports = {
   "commands": [
-	`ls`,
+	`dir`,
   ]
 }
