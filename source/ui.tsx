@@ -1,11 +1,13 @@
-import React, {FC} from 'react';
-import {Text} from 'ink';
+import React from 'react';
+import Branch from "./boards/branch";
 
-const App: FC<{name?: string}> = ({name = 'Stranger'}) => (
-	<Text>
-		Hello, <Text color="green">{name}</Text>
-	</Text>
-);
+const DashBoards = () => {
+	return <>
+		<Branch command={'ls'}/>
+		<Branch command={'git status'}/>
+	</>
+};
 
-module.exports = App;
-export default App;
+
+module.exports = DashBoards;
+export default DashBoards;
