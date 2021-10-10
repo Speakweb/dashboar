@@ -8,6 +8,7 @@ const DashBoards = () => {
 	return <>
 		{
 			config.commands.map(command => <Branch key={command} command={command}/> )
+
 		}
 	</>
 };
