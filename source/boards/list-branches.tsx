@@ -1,13 +1,8 @@
-/**
- * Make a components which takes as input a command, gets the output of that command and displays it in a listt stat
- */
-
-
 import React, {useEffect, useState} from "react";
 import {Text} from "ink";
 import { exec } from 'child_process';
 
-const Branch = ({command}: {command: string}) => {
+const List_Branch = ({command}: {command: string}) => {
 	const [color, setColor] = useState('green');
 	const [output, setOutput] = useState<string[]>([]);
 
@@ -34,6 +29,6 @@ const Branch = ({command}: {command: string}) => {
 		};
 	}, []);
 
-	return <Text color={color}>{output}</Text>;
+	return output.map(outputLine => <Text color={color}>{outputLine}</Text>);
 }
-export default Branch
+export default List_Branch
