@@ -10,7 +10,7 @@
 		"build": "tsc",
 		"start": "npm run build && node dist/cli.js",
 		"pretest": "npm run build",
-		"test": "xo && ava"
+		"test": "ava"
 	},
 	"files": [
 		"dist/cli.js"
@@ -21,14 +21,16 @@
 		"react": "^16.14.0"
 	},
 	"ava": {
-		"typescript": {
-			"extensions": [
-				"tsx"
-			],
-			"rewritePaths": {
-				"source/": "dist/"
-			}
-		}
+	  "typescript": {
+		"extensions": [
+		  "tsx",
+		  "ts"
+		],
+		"rewritePaths": {
+		  "source/": "dist/"
+		},
+		"compile": false
+	  }
 	},
 	"xo": {
 		"extends": "xo-react",

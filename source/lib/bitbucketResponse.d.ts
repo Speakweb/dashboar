@@ -156,12 +156,12 @@ declare module BitBucketResponse {
 		name: string;
 		project: Project;
 		language: string;
-		created_on: Date;
+		created_on: string;
 		mainbranch: Mainbranch;
 		workspace: Workspace;
 		has_issues: boolean;
 		owner: Owner;
-		updated_on: Date;
+		updated_on: string;
 		size: number;
 		type: string;
 		slug: string;

@@ -1,4 +1,4 @@
-{
+export default {
   "data": {
     "pagelen": 10,
     "size": 178,
