@@ -3,12 +3,13 @@
  * @param response
  */
 const getRepositoryNames = (response: BitBucketResponse.RootObject): string[] => {
-	response.data.values.forEach(bitbucketRepository => {
-		// bitbucketRepository.scm
-		// bitbucketRepository.name
-		return bitbucketRepository.scm;
-	});
-	return [];
+
+	let repositoryNames: string[] = []
+	response.data.values.forEach( repositoryObject => {
+		repositoryNames.push(repositoryObject.name)
+	})
+
+return repositoryNames
 }
 
 export default getRepositoryNames;
