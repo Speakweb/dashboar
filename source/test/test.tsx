@@ -1,5 +1,5 @@
 import test from 'ava';
-import response from './fixtures/response'
+import response from './fixtures/repositories-response'
 import getRepositoryNames from '../lib/getRepositoryNames'
 import React from 'react';
 import {render} from 'ink-testing-library';
