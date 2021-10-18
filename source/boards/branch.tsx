@@ -28,6 +28,7 @@ const Branch = ({command}: {command: string}) => {
 		};
 	}, []);
 
-	return <Text color={color}>{output}</Text>;
+	// Command output usually ends in a newLine, so trim it.
+	return <Text color={color}>{output.trim()}</Text>;
 }
 export default Branch

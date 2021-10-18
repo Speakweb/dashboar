@@ -4,13 +4,10 @@ import {Text} from 'ink'
 
 // @ts-ignore
 const RepositoryList: React.FC<{ repositories: BitBucketRepository[] }> = ({repositories}) => {
-
 	const listOfRepositoryElements: React.ReactElement[] = [];
-
 	repositories.forEach(repository => {
 		listOfRepositoryElements.push(<Text key={repository.name}>{repository.name}</Text>)
 	})
-
 	return listOfRepositoryElements;
 };
 export default RepositoryList;
