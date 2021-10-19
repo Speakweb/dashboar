@@ -3,6 +3,11 @@ import React from "react";
 
 export interface PullRequest {
 	title: string
+	links: {
+		html: {
+			href: string
+		}
+	}
 }
 
 export const PullRequestList: ({pullRequests}: { pullRequests: PullRequest[] }) => React.ReactElement[] = (
