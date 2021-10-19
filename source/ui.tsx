@@ -2,7 +2,7 @@ import React from 'react';
 import CommandOutput from "./boards/command";
 import {PullRequest} from "./boards/pull-request-list";
 import {PullRequests} from "./PullRequest";
-import {render, Box, Text} from 'ink';
+import {Box, render, Text} from 'ink';
 
 export type Config = { commands: string[], pullRequestConfigs: { workspace: string, repo: string }[] };
 
@@ -11,12 +11,18 @@ const DashBoards = ({config, pullRequestFetchFunction}: {
 		pullRequestFetchFunction: ({repo, workspace}: { repo: string, workspace: string }) => () => Promise<PullRequest[]>
 	}) =>
 		<>
+			<Box borderStyle="single" flexDirection='column'>
+				{
+					config.commands.map(command =>
+						<CommandOutput key={command} command={command}/>
+						)
+				}
+			</Box>
 			{
-				config.commands.map(command => <Box margin={2}> <CommandOutput key={command} command={command}/> </Box>)
-			}
-
-			{
-				config.pullRequestConfigs.map(config => <Box margin={2}> <PullRequests  key={`${config.repo} ${config.workspace}`} fetchFunction={pullRequestFetchFunction(config)}/> </Box>)
+				config.pullRequestConfigs.map(config => <Box borderStyle="single" flexDirection='column'>
+					<PullRequests key={`${config.repo} ${config.workspace}`}
+								  fetchFunction={pullRequestFetchFunction(config)}/>
+				</Box>)
 			}
 		</>
 ;
@@ -31,4 +37,4 @@ const Example = () => (
 	</Box>
 );
 
-render(<Example />);
+render(<Example/>);

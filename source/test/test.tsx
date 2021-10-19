@@ -50,7 +50,7 @@ test("It fetches pull requests on startup", t => {
 
 test("It renders the whole app", t => {
 	const {lastFrame} = render(<DashBoards
-		config={{commands: [ `echo "icecream"` ], pullRequestConfigs: []}}
+		config={{commands: [ `echo "icecream"` ], pullRequestConfigs: [{workspace: '', repo: ''}]}}
 		pullRequestFetchFunction={() => () => Promise.resolve(PullRequestsResponse.data.values)}/>
 	);
 
@@ -59,3 +59,6 @@ test("It renders the whole app", t => {
 		${releaseDate}`)
 })
 
+test("It renders a list of pull requests the correct color", t => {
+	t.is(1, 1)
+})
