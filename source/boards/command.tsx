@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Text} from "ink";
 import { exec } from 'child_process';
 
-const Branch = ({command}: {command: string}) => {
+const Command = ({command}: {command: string}) => {
 	const [color, setColor] = useState('green');
 	const [output, setOutput] = useState('');
 	useEffect(() => {
@@ -31,4 +31,4 @@ const Branch = ({command}: {command: string}) => {
 	// Command output usually ends in a newLine, so trim it.
 	return <Text color={color}>{output.trim()}</Text>;
 }
-export default Branch
+export default Command

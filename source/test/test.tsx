@@ -5,8 +5,11 @@ import React from 'react';
 import {render} from 'ink-testing-library';
 import RepositoryList from "../RepositoryList";
 import PullRequestsResponse from "./fixtures/pull-requests-response";
-import BitBucketRepository = BitBucketResponse.BitBucketRepository;
-import {PullRequest, PullRequestList} from "../boards/pull-request-list";
+import {PullRequestList} from "../boards/pull-request-list";
+import {PullRequests} from "../PullRequest";
+import DashBoards from '../ui'
+
+const releaseDate = 'Release/oct 14 2021';
 
 const expectedResult = [
 	"Drupal TASWeb Authentication Module",
@@ -34,9 +37,25 @@ test('repositoryList', t => {
 	t.is(lastFrame(), expectedResult.join('\n'));
 });
 
-
-
 test("rendering of pull requests", t => {
 	const {lastFrame} = render(<PullRequestList pullRequests={PullRequestsResponse.data.values}/>);
-	t.is(lastFrame(), 'Release/oct 14 2021');
+	t.is(lastFrame(), releaseDate);
+});
+
+
+test("It fetches pull requests on startup", t => {
+	const {lastFrame} = render(<PullRequests fetchFunction={() => Promise.resolve(PullRequestsResponse.data.values)}/>)
+	t.is(lastFrame(), releaseDate)
+});
+
+test("It renders the whole app", t => {
+	const {lastFrame} = render(<DashBoards
+		config={{commands: [ `echo "icecream"` ]}}
+		pullRequestFetchFunction={() => Promise.resolve(PullRequestsResponse.data.values)}/>
+	);
+
+	t.is(lastFrame(),
+		`icecream
+		${releaseDate}`)
 })
+
