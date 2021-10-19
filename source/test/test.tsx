@@ -50,8 +50,8 @@ test("It fetches pull requests on startup", t => {
 
 test("It renders the whole app", t => {
 	const {lastFrame} = render(<DashBoards
-		config={{commands: [ `echo "icecream"` ]}}
-		pullRequestFetchFunction={() => Promise.resolve(PullRequestsResponse.data.values)}/>
+		config={{commands: [ `echo "icecream"` ], pullRequestConfigs: []}}
+		pullRequestFetchFunction={() => () => Promise.resolve(PullRequestsResponse.data.values)}/>
 	);
 
 	t.is(lastFrame(),

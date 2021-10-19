@@ -1,7 +1,5 @@
 import {Text} from "ink";
 import React from "react";
-import React from 'react';
-import {render, Text} from 'ink';
 import Link from 'ink-link';
 
 export interface PullRequest {
@@ -13,16 +11,11 @@ export interface PullRequest {
 	}
 }
 
-export const PullRequestList: ({pullRequests}: { pullRequests: PullRequest[] }) => React.ReactElement[] = (
-	{
-		pullRequests
-	}
-) => {
-	let PullReqList: React.ReactElement[] = []
-	pullRequests.forEach(PullRequest => {
-			PullReqList.push(<Link url={PullRequest.links.html.href}> <Text
-				key={PullRequest.title}>{PullRequest.title}</Text></Link>)
+export const PullRequestList: React.FC<{ pullRequests: PullRequest[] }> = ({pullRequests}) => {
+	return <>
+		{
+			pullRequests.map(({title, links: {html: {href}}}) => <Link key={title} url={href}> <Text>{title}</Text></Link>)
 		}
-	)
-	return PullReqList
+
+	</>
 }
