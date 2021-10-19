@@ -1,3 +1,4 @@
+// I wrote this but never tested it, I should at some point
 export const consumePaginated = async <T>({
 										fetchFunction,
 										interval
