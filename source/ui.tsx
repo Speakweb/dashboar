@@ -1,15 +1,16 @@
 import React from 'react';
-import Branch from "./boards/branch";
-import { join } from 'path'
+import CommandOutput from "./boards/command";
+import {PullRequest} from "./boards/pull-request-list";
+import {PullRequests} from "./PullRequest";
 
-const config: {commands: string[]} = require(join(process.cwd(), './dashboar-config'));
+export type Config = { commands: string[] };
 
-const DashBoards = () => {
+const DashBoards = ({config, pullRequestFetchFunction}:{config: Config, pullRequestFetchFunction: () => Promise<PullRequest[]>}) => {
 	return <>
 		{
-			config.commands.map(command => <Branch key={command} command={command}/> )
-
+			config.commands.map(command => <CommandOutput key={command} command={command}/> )
 		}
+		<PullRequests fetchFunction={pullRequestFetchFunction}/>
 	</>
 };
 
