@@ -1,4 +1,4 @@
-import {PullRequest, PullRequestList} from "./boards/pull-request-list";
+import {PullRequest, PullRequestList} from "./pull-request-list";
 import React, {useEffect, useState} from "react";
 
 export function PullRequests({fetchFunction}: {
