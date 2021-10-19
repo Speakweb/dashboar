@@ -6,7 +6,7 @@ import {render} from 'ink-testing-library';
 import RepositoryList from "../RepositoryList";
 import PullRequestsResponse from "./fixtures/pull-requests-response";
 import BitBucketRepository = BitBucketResponse.BitBucketRepository;
-import {PullRequest} from "../boards/pull-request-list";
+import {PullRequest, PullRequestList} from "../boards/pull-request-list";
 
 const expectedResult = [
 	"Drupal TASWeb Authentication Module",
@@ -29,23 +29,14 @@ test("getRepositoryNames", t => {
 })
 
 
-test('greet user with a name', t => {
+test('repositoryList', t => {
 	const {lastFrame} = render(<RepositoryList repositories={RepositoriesResponse.data.values}/>);
 	t.is(lastFrame(), expectedResult.join('\n'));
 });
 
 
-interface PullRequest {
-	title: string;
-}
-
-function PulLRequestList({
-
-						 }: {pullRequests: PullRequest[]}) {
-	return null;
-}
 
 test("rendering of pull requests", t => {
-	const {lastFrame} = render(<PulLRequestList pullRequests={PullRequestsResponse.data.values}/>);
+	const {lastFrame} = render(<PullRequestList pullRequests={PullRequestsResponse.data.values}/>);
 	t.is(lastFrame(), 'Release/oct 14 2021');
 })

@@ -1,10 +1,9 @@
 export interface PullRequest {
+	title: string
 }
 
-export const PullRequest: React.FC<{pullRequests: PullRequest[]}> = (
+export const PullRequestList: React.FC<{ pullRequests: PullRequest[] }> = (
 	{
-
-	}
-) => {
+	}) => {
 
 }
