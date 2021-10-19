@@ -1,9 +1,10 @@
 import test from 'ava';
-import response from './fixtures/repositories-response'
+import RepositoriesResponse from './fixtures/repositories-response'
 import getRepositoryNames from '../lib/getRepositoryNames'
 import React from 'react';
 import {render} from 'ink-testing-library';
 import RepositoryList from "../RepositoryList";
+import PullRequestsResponse from "./fixtures/pull-requests-response";
 
 const expectedResult = [
 	"Drupal TASWeb Authentication Module",
@@ -27,6 +28,15 @@ test("getRepositoryNames", t => {
 
 
 test('greet user with a name', t => {
-	const {lastFrame} = render(<RepositoryList repositories={response.data.values}/>);
+	const {lastFrame} = render(<RepositoryList repositories={RepositoriesResponse.data}/>);
 	t.is(lastFrame(), expectedResult.join('\n'));
 });
+
+function PulLRequestList() {
+	return null;
+}
+
+test("rendering of pull requests", t => {
+	const {lastFrame} = render(<PulLRequestList pullRequests={PullRequestsResponse.data}/>);
+	t.is(lastFrame(), expectedResult.join('\n'));
+})
