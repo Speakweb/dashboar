@@ -6,6 +6,7 @@ import {render} from 'ink-testing-library';
 import RepositoryList from "../RepositoryList";
 import PullRequestsResponse from "./fixtures/pull-requests-response";
 import BitBucketRepository = BitBucketResponse.BitBucketRepository;
+import {PullRequest} from "../boards/pull-request-list";
 
 const expectedResult = [
 	"Drupal TASWeb Authentication Module",
@@ -33,7 +34,14 @@ test('greet user with a name', t => {
 	t.is(lastFrame(), expectedResult.join('\n'));
 });
 
-function PulLRequestList() {
+
+interface PullRequest {
+	title: string;
+}
+
+function PulLRequestList({
+
+						 }: {pullRequests: PullRequest[]}) {
 	return null;
 }
 
