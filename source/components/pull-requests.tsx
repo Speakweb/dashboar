@@ -8,9 +8,9 @@ export function PullRequests({fetchFunction}: {
 }) {
     const [pullRequests, setPulLRequests] = useState<PullRequest[]>([]);
     useEffect(() => {
-        setInterval(() => {
-			const promise = fetchFunction();
-			promise.then(values => setPulLRequests(values))
+		fetchFunction().then(values => setPulLRequests(values))
+		setInterval(() => {
+			fetchFunction().then(values => setPulLRequests(values))
         }, ONE_MINUTE)
     }, [])
     return <PullRequestList pullRequests={pullRequests}/>;
