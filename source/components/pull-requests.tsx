@@ -1,6 +1,8 @@
 import {PullRequest, PullRequestList} from "./pull-request-list";
 import React, {useEffect, useState} from "react";
 
+const ONE_MINUTE = 60000;
+
 export function PullRequests({fetchFunction}: {
     fetchFunction: () => Promise<PullRequest[]>
 }) {
@@ -9,7 +11,7 @@ export function PullRequests({fetchFunction}: {
         setInterval(() => {
 			const promise = fetchFunction();
 			promise.then(values => setPulLRequests(values))
-        }, 5000)
+        }, ONE_MINUTE)
     }, [])
     return <PullRequestList pullRequests={pullRequests}/>;
 }

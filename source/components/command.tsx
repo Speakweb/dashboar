@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Text} from "ink";
 import { exec } from 'child_process';
 
+const TEN_SECONDS = 10000;
 const Command = ({command}: {command: string}) => {
 	const [color, setColor] = useState('green');
 	const [output, setOutput] = useState('');
@@ -21,7 +22,7 @@ const Command = ({command}: {command: string}) => {
 				setOutput(stdout)
 				setColor('green')
 			})
-		}, 100);
+		}, TEN_SECONDS);
 
 		return () => {
 			clearInterval(timer);
