@@ -6,6 +6,7 @@ const clientOptions = {
 		username: process.env["BITBUCKET_EMAIL"],
 		password: process.env["BITBUCKET_PASSWORD"],
 	},
+	notice: false
 }
 
 const bitbucket = new Bitbucket(clientOptions);
