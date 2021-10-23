@@ -5,8 +5,20 @@ import Ui from './ui';
 import {join} from "path";
 import {fetchPullRequests} from "./lib/fetch-bitbucket";
 import {Config} from "./lib/config";
+import {findOs} from "./lib/findOs";
 
-const loadedConfiguration: Config = require(join(process.cwd(), './dashboar-config'));
+function giveConfigFile() {
+	if (findOs() === "win32") {
+		return './dashboar.windows.config.js'
+	}
+
+	if (findOs() === "MacOrLnx") {
+		return './dashboar.unix.config.js'
+	}
+	throw new Error('unsupported platform/OS' + findOs())
+}
+
+const loadedConfiguration: Config = require(join(process.cwd(), giveConfigFile()));
 
 render(<Ui
 	config={loadedConfiguration}
