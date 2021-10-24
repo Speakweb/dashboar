@@ -15,13 +15,17 @@ export function PullRequests({fetchFunction}: {
 		fetchFunction()
 			.then(values => setPulLRequests(values))
 			.then(() => setFetchingError(''))
-		// Add your .catch here
+			.catch(errorCaught => {
+				setFetchingError(errorCaught.error)
+			})
 
 		setInterval(() => {
 			fetchFunction()
 				.then(values => setPulLRequests(values))
 				.then(() => setFetchingError(''))
-			// Add your .catch here
+				.catch(errorCaught => {
+					setFetchingError(errorCaught.error)
+				})
 
         }, ONE_MINUTE)
     }, []);
