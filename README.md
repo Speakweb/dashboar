@@ -1,2 +1,7 @@
 # dashboar
-![It looks like this](https://imgur.com/fE4JDx2)
+
+Dashboar is an extensible NodeJs & React based terminal program.
+
+![Dashboar Test](dashboar.png)
+
+
