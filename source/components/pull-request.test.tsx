@@ -6,6 +6,6 @@ import {PullRequests} from "./pull-requests";
 export const releaseDate = 'Release/oct 14 2021';
 
 test("It fetches pull requests on startup", t => {
-	const {lastFrame} = render(<PullRequests fetchFunction={() => Promise.resolve(PullRequestsResponse.data.values)}/>)
+	const {lastFrame} = render(<PullRequests fetchFunction={() => Promise.resolve(PullRequestsResponse.data.values)} repositoryName={''}/>)
 	t.is(lastFrame(), releaseDate)
 });

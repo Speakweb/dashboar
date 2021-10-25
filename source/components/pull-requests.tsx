@@ -1,12 +1,14 @@
 import {PullRequest, PullRequestList} from "./pull-request-list";
-import {Text} from "ink";
+import {Text, Box} from "ink";
 import React, {useEffect, useState} from "react";
 
 const ONE_MINUTE = 60000;
 
-export function PullRequests({fetchFunction}: {
+export function PullRequests({fetchFunction, repositoryName}: {
     fetchFunction: () => Promise<PullRequest[]>
+	repositoryName: string
 }) {
+
     const [pullRequests, setPulLRequests] = useState<PullRequest[]>([]);
     const [fetchingError, setFetchingError] = useState<string>('');
 
@@ -30,8 +32,18 @@ export function PullRequests({fetchFunction}: {
         }, ONE_MINUTE)
     }, []);
 
-	if (fetchingError) {
-		return <Text>{fetchingError}</Text>
+	const returnWithTitle = ({repositoryName,display}:{
+		repositoryName: string
+		display: React.ReactElement
+	}) => {
+		return <Box> <Text>{repositoryName}</Text>{display}</Box>
 	}
-    return  <PullRequestList pullRequests={pullRequests}/>
+
+	if (fetchingError) {
+		return returnWithTitle({repositoryName:<Text>{fetchingError}</Text>})
+	}
+
+    return returnWithTitle({repositoryName,<PullRequestList pullRequests={pullRequests}/>})
 }
+
+

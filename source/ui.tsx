@@ -22,7 +22,9 @@ const Ui = ({config, pullRequestFetchFunction}: {
 					key={`${config.repo} ${config.workspace}`}
 					borderStyle="single" flexDirection='column'>
 					<PullRequests
-						fetchFunction={pullRequestFetchFunction(config)}/>
+						fetchFunction={pullRequestFetchFunction(config)}
+						repositoryName={config.repo}
+					/>
 				</Box>)
 			}
 		</>

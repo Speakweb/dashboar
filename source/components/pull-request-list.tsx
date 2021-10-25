@@ -9,6 +9,11 @@ export interface PullRequest {
 			href: string
 		}
 	}
+	source: {
+		repository:{
+			name: string
+		}
+	}
 }
 
 export const PullRequestList: React.FC<{ pullRequests: PullRequest[] }> = ({pullRequests}) => {
