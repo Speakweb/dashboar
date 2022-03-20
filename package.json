@@ -10,7 +10,8 @@
 		"build": "tsc",
 		"start": "npm run build && node dist/cli.js",
 		"pretest": "npm run build",
-		"test": "ava"
+		"test": "ava",
+		"query": "tsc query.ts --outFile query.js && node query.js"
 	},
 	"files": [
 		"dist/cli.js"
