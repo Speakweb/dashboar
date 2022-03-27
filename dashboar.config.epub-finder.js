@@ -13,5 +13,9 @@ module.exports = {
         command: ({ databaseHost }) => `ping ${databaseHost}`, // commands can be function which receive their store args as parameters
       },
     ],
+    prompts: {
+      databaseConnectionString: "What is the database connection string? ",
+      sshString: "What is the SSH string? "
+    }
   };
   

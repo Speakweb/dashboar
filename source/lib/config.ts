@@ -9,4 +9,16 @@ type StoreCommand = {
   },
   command: any
 };
-export type StoreConfig = { sshTunnels: [StoreSshTunnel], commands: [StoreCommand]}
+
+export type Store = {
+  databaseConnectionString: string,
+  sshString: string
+};
+
+export type StoreKey = 'databaseConnectionString' | 'sshString';
+
+export type StoreConfig = {
+  sshTunnels: [StoreSshTunnel],
+  commands: [StoreCommand],
+  prompts: Store
+};
