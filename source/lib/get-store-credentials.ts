@@ -1,4 +1,4 @@
-const readline = require("readline");
+import readline from 'readline';
 import { promises as fs, existsSync } from "fs";
 import { join } from "path";
 import { StoreConfig, Store, StoreKey } from "./config";
@@ -30,9 +30,7 @@ export const getStoreCredentials = async () => {
 
     const prompt = async (key: StoreKey) => {
       return new Promise<void>((resolve, reject) => {
-        rl.question(
-          loadedConfiguration.prompts[key],
-          async (dbString: string) => {
+        rl.question(loadedConfiguration.prompts[key], async (dbString: string) => {
             values[key] = dbString;
             try {
               await fs.writeFile(storeFilePath, JSON.stringify(values));
