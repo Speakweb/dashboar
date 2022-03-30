@@ -28,6 +28,21 @@ export const getStoreCredentials = async () => {
       sshString: "",
     };
 
+    // Prompts the user for a new dashboar-store password
+    const getStorePassword = async () => {
+      return new Promise<void>((resolve, reject) => {
+        rl.question("What is the password for the store? ", async (pw: string) => {
+          if (!pw.length) reject();
+          else {
+            console.log("Created dashboar-store");
+            // todo: encrypt file with pw
+
+            resolve();
+          }
+        });
+      });
+    };
+
     // Prompts the user for values based off the questions in the config file
     const prompt = async (key: StoreKey) => {
       return new Promise<void>((resolve, reject) => {
@@ -44,21 +59,7 @@ export const getStoreCredentials = async () => {
       });
     };
 
-    const createStore = async () => {
-      return new Promise<void>((resolve, reject) => {
-        rl.question("What is the password for the store? ", async (pw: string) => {
-          if (!pw.length) reject();
-          else {
-            console.log("Created dashboar-store");
-            // todo: encrypt file with pw
-
-            resolve();
-          }
-        });
-      });
-    };
-
-    await createStore();
+    await getStorePassword();
     let key: StoreKey | any;
     for (key in loadedConfiguration.prompts) {
       await prompt(key);
