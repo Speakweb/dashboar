@@ -55,10 +55,14 @@ export const getStoreCredentials = async () => {
     const pw = await getStorePassword();
     const buffer = await fs.readFile(storeFilePath);
     const encryptedData = buffer.toString().replace(/['"]+/g, "");
-    console.log("encrypted data", encryptedData);
-    const data = decrypt(pw, encryptedData);
-    console.log("decrypted data", data);
-    // todo: check if values from config file are present in store file
+    const decryptedData = decrypt(pw, encryptedData);
+    if (decryptedData === null) {
+      console.log('Incorrect Password');
+      rl.close();
+    } else {
+      //const data: Store = JSON.parse(decryptedData);
+      // todo: check if values from config file are present in store file
+    }
   } else {
     console.log("\nCould not find input file, creating one: ./dashboar-store");
 

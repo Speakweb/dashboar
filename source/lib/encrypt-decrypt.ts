@@ -17,8 +17,12 @@ export const encrypt = (pw: string, data: string) => {
 };
 
 export const decrypt = (pw: string, encryptedData: any) => {
-  const [data, iv] = encryptedData.split("|");
-  const decipher = crypto.createDecipheriv(algorithm, getSecretKey(pw), Buffer.from(iv, "hex"));
-  const decryptedData = decipher.update(data, "hex", "utf-8") + decipher.final();
-  return decryptedData;
+  try {
+    const [data, iv] = encryptedData.split("|");
+    const decipher = crypto.createDecipheriv(algorithm, getSecretKey(pw), Buffer.from(iv, "hex"));
+    const decryptedData = decipher.update(data, "hex", "utf-8") + decipher.final();
+    return decryptedData;
+  } catch (err) {
+    return null;
+  }
 };
