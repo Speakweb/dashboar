@@ -1,18 +1,38 @@
 module.exports = {
-  "commands": [
-	`cd /Users/marvinirwin/WebstormProjects/arcteryx/account-pages && echo "account-pages $(git branch --show-current)"`,
-	`cd /Users/marvinirwin/WebstormProjects/forgerock/arcteryx-checkout && echo "checkout $(git branch --show-current)"`,
-	`cd /Users/marvinirwin/WebstormProjects/forgerock/catalog-pages && echo "catalog-pages $(git branch --show-current)"`,
-	`cd /Users/marvinirwin/WebstormProjects/arcteryx/arcteryx-js-helpers && echo "js-helpers $(git branch --show-current)"`,
-  ],
-	pullRequestConfigs: [
+	pullRequestConfigs: [],
+	sshTunnels: [
+		// Tell dashboar that it’s needs to be use whatever widget is used for ssh tunnels
 		{
-			workspace: "arcteryx",
-			repo: 'arcteryx-checkout'
+			configKey: "LanguageTrainer keycloak ssh tunnel",
+			storeParameters: {
+				keyCloakSshTunnel: {
+					type: "string",
+					prompt: "Keycloak ssh tunnel (ex. ssh -L 8080:localhost:8080 root@165.227.49.247):"
+				},
+			},
+			command: ({keyCloakSshTunnel}) => keyCloakSshTunnel
 		},
+	],
+	postgresqlConnections: [
 		{
-			workspace: "arcteryx",
-			repo: 'arcteryx-js-helpers'
+			configKey: "LanguageTrainer Postgres database",
+			storeParameters: {
+				postgresqlHost: "languagetrainer PostgreSQL host",
+				postgresqlUsername: "languagetrainer PostgreSQL username",
+				postgresqlPassword: "languagetrainer PostgreSQL password",
+				postgresqlDatabase: "languagetrainer PostgreSQL database",
+				postgresqlPort: {
+					type: 'number',
+					prompt: "languagetrainer PostgreSQL port"
+				}
+			},
 		}
+	],
+	repeatedCommands: [
+		{
+			configKey: "PingKeycloak",
+			// Ping the keycloak instance
+			command: 'echo "Pinging keycloak on localhost:8080"; ping localhost:8080',
+		},
 	]
 }

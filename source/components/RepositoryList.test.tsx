@@ -1,9 +1,9 @@
 import test from "ava";
 import {render} from "ink-testing-library";
-import RepositoriesResponse from "../test/fixtures/repositories-response";
+import RepositoriesResponse from "../test/fixtures/repositoriesResponse";
 import React from "react";
-import RepositoryList from "./repository-list";
-import {expectedResult} from "../lib/get-repository-names.test";
+import RepositoryList from "./RepositoryList";
+import {expectedResult} from "../lib/getRepositoryNames.test";
 
 test('repositoryList', t => {
 	const {lastFrame} = render(<RepositoryList repositories={RepositoriesResponse.data.values}/>);

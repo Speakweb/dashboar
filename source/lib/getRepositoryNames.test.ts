@@ -1,6 +1,6 @@
 import test from "ava";
-import RepositoriesResponse from "../test/fixtures/repositories-response";
-import getRepositoryNames from "./get-repository-names";
+import RepositoriesResponse from "../test/fixtures/repositoriesResponse";
+import getRepositoryNames from "./getRepositoryNames";
 
 export const expectedResult = [
 	"Drupal TASWeb Authentication Module",

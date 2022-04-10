@@ -1,31 +1,68 @@
 import React from 'react';
-import CommandOutput from './components/command';
-import {PullRequest} from './components/pull-request-list';
-import {PullRequests} from "./components/pull-requests";
+import CommandOutput from './components/RepeatCommand';
+import {PullRequest} from './components/PullRequestList';
+import {PullRequests} from "./components/PullRequests";
 import {Box} from 'ink';
-import {Config} from "./lib/config";
+import {DashboarConfig, StoreValues} from "./lib/config";
+import {PostgresConnection} from "./components/PostgresConnection";
 
-const Ui = ({config, pullRequestFetchFunction}: {
-		config: Config,
-		pullRequestFetchFunction: ({repo, workspace}: { repo: string, workspace: string }) => () => Promise<PullRequest[]>
-	}) =>
-		<>
-			<Box borderStyle="single" flexDirection='column'>
-				{
-					config.commands.map(command =>
-						<CommandOutput key={command} command={command}/>
-					)
-				}
-			</Box>
+const Ui = (
+	{
+		config: {
+			repeatCommands,
+			pullRequestConfigs,
+			sshTunnels,
+			postgresqlConnections
+		},
+		pullRequestFetchFunction,
+		storeValues
+	}: {
+		config: DashboarConfig,
+		pullRequestFetchFunction: ({
+									   repo,
+									   workspace
+								   }: { repo: string, workspace: string }
+		) => () => Promise<PullRequest[]>,
+		storeValues: StoreValues
+	}
+	) =>
+	<>
+		<Box borderStyle="single" flexDirection='column'>
 			{
-				config.pullRequestConfigs.map(config => <Box
-					key={`${config.repo} ${config.workspace}`}
-					borderStyle="single" flexDirection='column'>
-					<PullRequests
-						fetchFunction={pullRequestFetchFunction(config)}/>
-				</Box>)
+				repeatCommands?.map(({command}) => {
+						const str = typeof command === 'string' ? command : command(storeValues);
+						return <CommandOutput key={str} command={str}/>;
+					}
+				)
 			}
-		</>
+		</Box>
+		{
+			pullRequestConfigs?.map(({storeParameters}) => <Box
+				key={`${storeParameters.workspace} ${storeParameters.repo}`}
+				borderStyle="single" flexDirection='column'>
+				<PullRequests
+					fetchFunction={pullRequestFetchFunction(storeParameters as unknown as {repo: string, workspace: string})}/>
+			</Box>)
+		}
+		{
+			sshTunnels?.map(({command}) => {
+					const str = typeof command === 'string' ? command : command(storeValues);
+					return <CommandOutput key={str} command={str}/>;
+				}
+			)
+		}
+		{
+			postgresqlConnections?.map(({configKey}) => {
+				const configValues = storeValues[configKey];
+					// @ts-ignore
+				return <PostgresConnection
+						key={configKey}
+						{...configValues}
+					/>;
+				}
+			)
+		}
+	</>
 ;
 
 

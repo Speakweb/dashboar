@@ -3,7 +3,7 @@ import {Text} from "ink";
 import { exec } from 'child_process';
 
 const TEN_SECONDS = 10000;
-const Command = ({command}: {command: string}) => {
+const RepeatCommand = ({command}: {command: string}) => {
 	const [color, setColor] = useState('green');
 	const [output, setOutput] = useState('');
 	useEffect(() => {
@@ -32,4 +32,4 @@ const Command = ({command}: {command: string}) => {
 	// Command output usually ends in a newLine, so trim it.
 	return <Text color={color}>{output.trim()}</Text>;
 }
-export default Command
+export default RepeatCommand

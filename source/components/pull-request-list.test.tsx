@@ -1,8 +1,8 @@
 import test from "ava";
 import {render} from "ink-testing-library";
-import PullRequestsResponse from "../test/fixtures/pull-requests-response";
+import PullRequestsResponse from "../test/fixtures/pullRequestsResponse";
 import React from "react";
-import {PullRequestList} from "./pull-request-list";
+import {PullRequestList} from "./PullRequestList";
 import {releaseDate} from "./pull-request.test";
 
 test("rendering of pull requests", t => {

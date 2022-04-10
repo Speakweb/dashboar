@@ -1,4 +1,4 @@
-import {PullRequest, PullRequestList} from "./pull-request-list";
+import {PullRequest, PullRequestList} from "./PullRequestList";
 import {Text} from "ink";
 import React, {useEffect, useState} from "react";
 
