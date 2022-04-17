@@ -6,8 +6,10 @@ module.exports = {
 			configKey: "LanguageTrainer keycloak ssh tunnel",
 			storeParameters: {
 				keyCloakSshTunnel: {
-					type: "string",
-					prompt: "Keycloak ssh tunnel (ex. ssh -L 8080:localhost:8080 root@165.227.49.247):"
+					sources: {
+						type: "string",
+						prompt: "Keycloak ssh tunnel (ex. ssh -L 8080:localhost:8080 root@165.227.49.247):"
+					}
 				},
 			},
 			command: ({keyCloakSshTunnel}) => keyCloakSshTunnel
@@ -17,13 +19,36 @@ module.exports = {
 		{
 			configKey: "LanguageTrainer Postgres database",
 			storeParameters: {
-				postgresqlHost: "languagetrainer PostgreSQL host",
-				postgresqlUsername: "languagetrainer PostgreSQL username",
-				postgresqlPassword: "languagetrainer PostgreSQL password",
-				postgresqlDatabase: "languagetrainer PostgreSQL database",
+				postgresqlHost: {
+					sources: {
+						sources: "Environment",
+						envKey: "TYPEORM_HOST"
+					}
+				},
+				postgresqlUsername: {
+					sources: {
+						sources: "Environment",
+						envKey: "TYPEORM_USERNAME"
+					}
+				},
+				postgresqlPassword: {
+					sources: {
+						sourceType: "Environment",
+						envKey: "TYPEORM_PASSWORD"
+					}
+				},
+				postgresqlDatabase: {
+					sources: {
+						sources: "Environment",
+						envKey: "TYPEORM_DATABASE"
+					}
+				},
 				postgresqlPort: {
 					type: 'number',
-					prompt: "languagetrainer PostgreSQL port"
+					sources: {
+						sources: "Environment",
+						envKey: "TYPEORM_PORT"
+					}
 				}
 			},
 		}

@@ -1,10 +1,35 @@
+export enum ConfigSources {
+	Environment= "Environment",
+	Prompt="Prompt",
+}
+
+
+
+export type StringOrStringFunc = string | (() => string);
+
+export type SourceEnvironmentSchema = {
+	sourceType: ConfigSources.Environment
+	envKey: string
+}
+
+export type SourcePromptSchema = {
+	type?: string | number;
+	sourceType: ConfigSources.Prompt;
+	prompt: string | (() => string)
+}
+/**
+ * StringOrStringFunc
+ */
+export type SourceSchema = SourceEnvironmentSchema | SourcePromptSchema | StringOrStringFunc;// TODO add more SourceObjectSchemaTypes
+
+
+export type StoreParameterObjectSchema = {
+	sources?: SourceSchema | SourceSchema[]
+};
 /**
  * The configuration of a store value
  */
-export type StoreParameterSchema = {
-	type?: "string" | "number";
-	prompt: "string" | (() => string)
-} | string
+export type StoreParameterSchema = StoreParameterObjectSchema | string
 
 
 /**

@@ -1,16 +1,29 @@
-import readline from "readline";
-import {promises as fs, existsSync} from "fs";
+import readline, {Interface} from "readline";
+import {existsSync, promises as fs} from "fs";
 import {flatten} from 'lodash';
-import {encrypt, decrypt} from "./encryptDecrypt";
+import {decrypt, encrypt} from "./encryptDecrypt";
 import {
-	StoreParameterSchema,
+	ConfigSources,
+	ConfigWithStoreParameters,
 	DashboarConfig,
+	SourceEnvironmentSchema,
+	SourcePromptSchema,
+	SourceSchema,
+	StoreParameterObjectSchema,
+	StoreParameterSchema,
 	StoreValues,
-	ConfigWithStoreParameters
+	StringOrStringFunc
 } from "./config";
-import {Interface} from 'readline';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 
 const storeFilePath = "dashboar-store";
+
+const resolveStringFunc = (s: StringOrStringFunc) => {
+	return typeof s === 'function' ? s() : s;
+}
 
 /**
  * I wonder if this should be a global
@@ -74,6 +87,16 @@ const loadStoreFromFile = async ({cli}:{cli: Interface}): Promise<{ storeValues:
 };
 
 type StoreParameterConfiguration = { storeParameterKey: string, storeParameterSchema: StoreParameterSchema, configKey: string };
+
+
+function getSourcePromptType(sourceSchema: SourceSchema) {
+	return {
+		sourceIsPromptString: typeof sourceSchema === 'string',
+		sourceIsPromptFunction: typeof sourceSchema === 'function',
+		sourceIsPromptObject: (sourceSchema as SourcePromptSchema).type === ConfigSources.Prompt
+	};
+}
+
 export const resolveAllStoreValues = async (
 	{
 		currentStore,
@@ -96,7 +119,22 @@ export const resolveAllStoreValues = async (
 		} as StoreParameterConfiguration))
 	}));
 	for (let i = 0; i < storeValueSchemas.length; i++) {
-		const { storeParameterKey, storeParameterSchema, configKey } = storeValueSchemas[i] as StoreParameterConfiguration;
+		const storeParameterConfiguration = storeValueSchemas[i] as StoreParameterConfiguration;
+		const { storeParameterKey, storeParameterSchema, configKey } = storeParameterConfiguration;
+
+		const sources = (storeParameterSchema as StoreParameterObjectSchema).sources || storeParameterSchema as StringOrStringFunc;
+		/**
+		 * See if this parameter can be obtained from different sources, like the environment
+		 */
+		const sourcesList: SourceSchema[] = Array.isArray(sources) ? sources : [sources];
+/*
+		if (!sources || !sources.length) {
+			sources = [ConfigSources.Prompt];
+		}
+*/
+		/**
+		 * Initialize the config namespace in the object (Like all the key/values for the database connection)
+		 */
 		if (!currentStore[configKey]) {
 			currentStore[configKey] = {};
 		}
@@ -104,10 +142,37 @@ export const resolveAllStoreValues = async (
 		if (currentStore[configKey][storeParameterKey]) {
 			console.log(`Using existing value for ${storeParameterKey}`);
 		} else {
-			// @ts-ignore
-			currentStore[configKey][storeParameterKey] = await  promptUserForValue({cli, prompt: typeof storeParameterSchema === 'string' ? storeParameterSchema :
-					typeof storeParameterSchema.prompt === 'string' ? storeParameterSchema.prompt : storeParameterSchema.prompt()
-			});
+			for (let j = 0; j < sourcesList.length; j++) {
+				const sourcesListElement = sourcesList[j] as SourceSchema;
+				const {sourceIsPromptString, sourceIsPromptFunction, sourceIsPromptObject} = getSourcePromptType(sourcesListElement);
+				const isPrompt = sourceIsPromptObject || sourceIsPromptFunction || sourceIsPromptString;
+				const isEnvironment = (sourcesListElement as SourceEnvironmentSchema).sourceType === ConfigSources.Environment;
+				if (isPrompt) {
+					let promptString = '';
+					if (sourceIsPromptObject) {
+						promptString = resolveStringFunc((sourcesListElement as SourcePromptSchema).prompt);
+					} else {
+						promptString = resolveStringFunc(sourcesListElement as StringOrStringFunc)
+					}
+					// @ts-ignore
+					currentStore[configKey][storeParameterKey] = await promptUserForValue({cli, prompt: typeof storeParameterSchema === 'string' ? storeParameterSchema :
+							promptString
+					});
+					// Leave the loop, once we get a result from the user
+					break;
+				}
+				if (isEnvironment) {
+					const environmentValue = process.env[(sourcesListElement as SourceEnvironmentSchema).envKey];
+					// @ts-ignore
+					currentStore[configKey][storeParameterKey] = environmentValue;
+					if (!environmentValue) {
+						console.log(`Could not find an environment value for ${environmentValue}`);
+					}else {
+						break;
+					}
+				}
+			}
+
 		}
 	}
 	// Remove this because it prints all our encrypted values lol

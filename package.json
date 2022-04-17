@@ -17,6 +17,7 @@
 	],
 	"dependencies": {
 		"bitbucket": "^2.6.3",
+		"dotenv": "^16.0.0",
 		"ink": "^3.0.9",
 		"ink-link": "^2.0.0",
 		"lodash": "^4.17.21",
