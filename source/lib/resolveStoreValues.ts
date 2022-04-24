@@ -6,6 +6,7 @@ import {
 	ConfigSources,
 	ConfigWithStoreParameters,
 	DashboarConfig,
+	PromptType,
 	SourceEnvironmentSchema,
 	SourcePromptSchema,
 	SourceSchema,
@@ -48,20 +49,21 @@ const getStorePassword = async ({cli, prompt}: {cli: Interface, prompt: string})
 };
 
 // Prompts the user for values based off the questions in the config file
-const promptUserForValue = async ({cli, prompt}:{cli: Interface, prompt: string | (() => string)}) => {
+const promptUserForValue = async ({cli, valueType, prompt}:{cli: Interface, valueType: PromptType, prompt: string | (() => string)}) => {
 	// Call this until the answer is not blank.
 	// TODO: Add ways for the user to cancel/skip this value
 	const askForValue = () => new Promise<string>((resolve) => {
 		cli.question((typeof prompt === 'string') ? prompt : prompt(), async (answer: string) => {
 			// TODO add logic for number/string prompts too
-			resolve(answer);
+			if (typeof valueType === 'string') resolve(answer);
+			else resolve(Number.isNaN(Number(answer)) ? "" : answer);
 		});
 	});
 	let value: string = "";
 	while (!value) {
 		value = await askForValue();
 		if (!value) {
-			console.log("Value not provided")
+			console.log(typeof valueType === 'string' ? "Value not provided" : "Value must be of type Number")
 		}
 	}
 	return value;
@@ -154,10 +156,16 @@ export const resolveAllStoreValues = async (
 					} else {
 						promptString = resolveStringFunc(sourcesListElement as StringOrStringFunc)
 					}
-					// @ts-ignore
-					currentStore[configKey][storeParameterKey] = await promptUserForValue({cli, prompt: typeof storeParameterSchema === 'string' ? storeParameterSchema :
-							promptString
+					
+					const userInput = await promptUserForValue({
+						cli,
+						valueType: (sourcesListElement as SourcePromptSchema).type,
+						prompt: typeof storeParameterSchema === 'string' ? storeParameterSchema : promptString
 					});
+					// Storing the user input value as a Number if the store value should be of type Number
+					// @ts-ignore
+					currentStore[configKey][storeParameterKey] = Number.isNaN(Number(userInput)) ? userInput : Number(userInput);
+
 					// Leave the loop, once we get a result from the user
 					break;
 				}

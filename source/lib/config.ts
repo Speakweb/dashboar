@@ -3,7 +3,7 @@ export enum ConfigSources {
 	Prompt="Prompt",
 }
 
-
+export type PromptType = string | number | undefined;
 
 export type StringOrStringFunc = string | (() => string);
 
@@ -13,7 +13,7 @@ export type SourceEnvironmentSchema = {
 }
 
 export type SourcePromptSchema = {
-	type?: string | number;
+	type?: PromptType;
 	sourceType: ConfigSources.Prompt;
 	prompt: string | (() => string)
 }
