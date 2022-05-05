@@ -57,10 +57,28 @@ export const PostgresConnection = (
 	]);
 	const promiseResult = usePromise(
 		useMemo(() => {
-				return pool.query('SELECT NOW()')
+			return (async () => {
+				try {
+					return await pool.query('SELECT NOW()')
+				} catch(e){
+					console.error(e);
+					throw e
+				}
+			})()
 				// TODO, close the pool when finished or something like that
 			}, [pool]
 		)
-	)
-	return <Text>{JSON.stringify(promiseResult)}</Text>
+	);
+	const promiseResolved = promiseResult.isResolved;
+	if (promiseResolved) {
+		// @ts-ignore
+		const querySuccessful = promiseResult?.result?.rowCount === 1;
+		if (querySuccessful) {
+			return <Text>Successfully queried {host} {database}</Text>
+		} else {
+			return <Text>Could not connect to {host} {database}</Text>
+		}
+	} else {
+		return <Text>Querying {host} {database} ...</Text>
+	}
 }

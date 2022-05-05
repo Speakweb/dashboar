@@ -1,9 +1,8 @@
 import readline, {Interface} from "readline";
 import {existsSync, promises as fs} from "fs";
-import {flatten} from 'lodash';
+import {flatten} from "lodash";
 import {decrypt, encrypt} from "./encryptDecrypt";
 import {
-	ConfigSources,
 	ConfigWithStoreParameters,
 	DashboarConfig,
 	SourceEnvironmentSchema,
@@ -14,10 +13,13 @@ import {
 	StoreValues,
 	StringOrStringFunc
 } from "./config";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
+import debug from 'debug';
+
+
+const d = debug('resolve-store-values');
 
 dotenv.config();
-
 
 const storeFilePath = "dashboar-store";
 
@@ -67,7 +69,7 @@ const promptUserForValue = async ({cli, prompt}:{cli: Interface, prompt: string 
 	return value;
 };
 
-const loadStoreFromFile = async ({cli}:{cli: Interface}): Promise<{ storeValues: StoreValues, password: string }> => {
+const readStoreFromEncryptedFile = async ({cli}:{cli: Interface}): Promise<{ storeValues: StoreValues, password: string }> => {
 	/**
 	 * The flat key/value pairs which which are resolved by loading the store file and prompting if necessary
 	 */
@@ -86,16 +88,19 @@ const loadStoreFromFile = async ({cli}:{cli: Interface}): Promise<{ storeValues:
 	return {storeValues, password}
 };
 
+const readStoreFromPlainFile = async () => {
+	const text = (await fs.readFile(storeFilePath)).toString();
+	let parse = JSON.parse(text);
+	return parse
+}
+
 type StoreParameterConfiguration = { storeParameterKey: string, storeParameterSchema: StoreParameterSchema, configKey: string };
 
-
-function getSourcePromptType(sourceSchema: SourceSchema) {
-	return {
-		sourceIsPromptString: typeof sourceSchema === 'string',
-		sourceIsPromptFunction: typeof sourceSchema === 'function',
-		sourceIsPromptObject: (sourceSchema as SourcePromptSchema).type === ConfigSources.Prompt
-	};
-}
+const getSourcePromptType = (sourceSchema: SourceSchema) => ({
+	sourceIsPromptString: typeof sourceSchema === 'string',
+	sourceIsPromptFunction: typeof sourceSchema === 'function',
+	sourceIsPromptObject: Boolean((sourceSchema as SourcePromptSchema).prompt)
+});
 
 export const resolveAllStoreValues = async (
 	{
@@ -106,7 +111,7 @@ export const resolveAllStoreValues = async (
 			sshTunnels,
 			postgresqlConnections
 		},
-		cli
+		cli,
 	}: { currentStore: StoreValues, config: DashboarConfig, cli: Interface }): Promise<StoreValues> => {
 	// @ts-ignore
 	const configLists: ConfigWithStoreParameters<{}>[] = flatten([pullRequestConfigs, repeatCommands, sshTunnels, postgresqlConnections].filter(v => Boolean(v)));
@@ -120,6 +125,7 @@ export const resolveAllStoreValues = async (
 	}));
 	for (let i = 0; i < storeValueSchemas.length; i++) {
 		const storeParameterConfiguration = storeValueSchemas[i] as StoreParameterConfiguration;
+		d(JSON.stringify(storeParameterConfiguration, null, '\t'));
 		const { storeParameterKey, storeParameterSchema, configKey } = storeParameterConfiguration;
 
 		const sources = (storeParameterSchema as StoreParameterObjectSchema).sources || storeParameterSchema as StringOrStringFunc;
@@ -146,7 +152,7 @@ export const resolveAllStoreValues = async (
 				const sourcesListElement = sourcesList[j] as SourceSchema;
 				const {sourceIsPromptString, sourceIsPromptFunction, sourceIsPromptObject} = getSourcePromptType(sourcesListElement);
 				const isPrompt = sourceIsPromptObject || sourceIsPromptFunction || sourceIsPromptString;
-				const isEnvironment = (sourcesListElement as SourceEnvironmentSchema).sourceType === ConfigSources.Environment;
+				const isEnvironment = (sourcesListElement as SourceEnvironmentSchema).envKey;
 				if (isPrompt) {
 					let promptString = '';
 					if (sourceIsPromptObject) {
@@ -175,28 +181,52 @@ export const resolveAllStoreValues = async (
 
 		}
 	}
-	// Remove this because it prints all our encrypted values lol
 	console.log(JSON.stringify(currentStore, null, '  '))
 	return currentStore;
 }
 
-export const saveStore = async ({storeValues, password}:{storeValues: StoreValues, password: string}) => {
+export const saveEncryptedStore = async ({storeValues, password}:{storeValues: StoreValues, password: string}) => {
 	const encryptedData = encrypt(password, JSON.stringify(storeValues));
 	await fs.writeFile(storeFilePath, JSON.stringify(encryptedData));
 }
+export const savePlaintextStore = async ({storeValues}:{storeValues: StoreValues }) => {
+	await fs.writeFile(storeFilePath, JSON.stringify(storeValues));
+}
 
-export const resolveStoreValues = async (config: DashboarConfig) => {
-	const cli = getCommandPromptInterface();
-	const storeFileExists = existsSync(storeFilePath);
-
+async function resolveEncryptedStoreFile(storeFileExists: boolean, cli: Interface, config: DashboarConfig) {
 	if (storeFileExists) {
-		const {storeValues: existingStore, password} = await loadStoreFromFile({cli});
+		const {storeValues: existingStore, password} = await readStoreFromEncryptedFile({cli});
 		const storeValues = await resolveAllStoreValues({currentStore: existingStore, config, cli});
-		await saveStore({storeValues, password})
+		await saveEncryptedStore({storeValues, password})
 		return storeValues;
 	} else {
 		const storeValues = await resolveAllStoreValues({config, currentStore: {}, cli});
-		await saveStore({storeValues, password: await getStorePassword({cli, prompt: `Set the password for ${storeFilePath}`})})
+		await saveEncryptedStore({
+			storeValues,
+			password: await getStorePassword({cli, prompt: `Set the password for ${storeFilePath}`})
+		})
 		return storeValues;
 	}
+}
+
+export const resolveStoreValues = async ({config, storeFileIsEncrypted}:{config: DashboarConfig, storeFileIsEncrypted: boolean}) => {
+	const cli = getCommandPromptInterface();
+	const storeFileExists = existsSync(storeFilePath);
+	if (storeFileIsEncrypted) {
+		return await resolveEncryptedStoreFile(storeFileExists, cli, config);
+	}
+	return await resolvePlainStoreFile({storeFileExists, cli, config})
 };
+
+async function resolvePlainStoreFile({storeFileExists, cli, config}:{storeFileExists: boolean, cli: Interface, config: DashboarConfig}) {
+	if (storeFileExists) {
+		const existingStore = await readStoreFromPlainFile();
+		const storeValues = await resolveAllStoreValues({currentStore: existingStore, config, cli});
+		await savePlaintextStore({storeValues})
+		return storeValues;
+	} else {
+		const storeValues = await resolveAllStoreValues({config, currentStore: {}, cli});
+		await savePlaintextStore({storeValues})
+		return storeValues;
+	}
+}

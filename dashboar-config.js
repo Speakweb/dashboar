@@ -19,31 +19,31 @@ module.exports = {
 		{
 			configKey: "LanguageTrainer Postgres database",
 			storeParameters: {
-				postgresqlHost: {
+				host: {
 					sources: {
 						sources: "Environment",
 						envKey: "TYPEORM_HOST"
 					}
 				},
-				postgresqlUsername: {
+				user: {
 					sources: {
 						sources: "Environment",
 						envKey: "TYPEORM_USERNAME"
 					}
 				},
-				postgresqlPassword: {
+				password: {
 					sources: {
 						sourceType: "Environment",
 						envKey: "TYPEORM_PASSWORD"
 					}
 				},
-				postgresqlDatabase: {
+				database: {
 					sources: {
 						sources: "Environment",
 						envKey: "TYPEORM_DATABASE"
 					}
 				},
-				postgresqlPort: {
+				port: {
 					type: 'number',
 					sources: {
 						sources: "Environment",

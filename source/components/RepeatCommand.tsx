@@ -1,27 +1,15 @@
 import React, {useEffect, useState} from "react";
 import {Text} from "ink";
 import { exec } from 'child_process';
+import {execCommand} from "../lib/execCommand";
 
 const TEN_SECONDS = 10000;
-const RepeatCommand = ({command}: {command: string}) => {
+export const RepeatCommand = ({command}: {command: string}) => {
 	const [color, setColor] = useState('green');
 	const [output, setOutput] = useState('');
 	useEffect(() => {
 		const timer = setInterval(() => {
-			exec(command, (error, stdout, stderr) => {
-				if (error) {
-					setOutput(error.message)
-					setColor('red')
-					return;
-				}
-				if (stderr) {
-					setOutput(stderr)
-					setColor('red')
-					return;
-				}
-				setOutput(stdout)
-				setColor('green')
-			})
+			execCommand(command, setOutput, setColor);
 		}, TEN_SECONDS);
 
 		return () => {

@@ -1,10 +1,11 @@
 import React from 'react';
-import CommandOutput from './components/RepeatCommand';
+import RepeatCommand from './components/RepeatCommand';
 import {PullRequest} from './components/PullRequestList';
 import {PullRequests} from "./components/PullRequests";
 import {Box} from 'ink';
 import {DashboarConfig, StoreValues} from "./lib/config";
-import {PostgresConnection} from "./components/PostgresConnection";
+import {PostgresqlConnectionPanel} from "./lib/panels/PostgresqlConnectionPanel";
+import {SshTunnelPanel} from "./lib/panels/SshTunnelPanel";
 
 const Ui = (
 	{
@@ -31,7 +32,7 @@ const Ui = (
 			{
 				repeatCommands?.map(({command}) => {
 						const str = typeof command === 'string' ? command : command(storeValues);
-						return <CommandOutput key={str} command={str}/>;
+						return <RepeatCommand key={str} command={str}/>;
 					}
 				)
 			}
@@ -41,25 +42,24 @@ const Ui = (
 				key={`${storeParameters.workspace} ${storeParameters.repo}`}
 				borderStyle="single" flexDirection='column'>
 				<PullRequests
-					fetchFunction={pullRequestFetchFunction(storeParameters as unknown as {repo: string, workspace: string})}/>
+					fetchFunction={pullRequestFetchFunction(storeParameters as unknown as {repo: string, workspace: string})}
+					key={`${storeParameters.repo} ${storeParameters.workspace}`}
+				/>
 			</Box>)
 		}
 		{
-			sshTunnels?.map(({command}) => {
-					const str = typeof command === 'string' ? command : command(storeValues);
-					return <CommandOutput key={str} command={str}/>;
-				}
+			sshTunnels?.map((config) => new SshTunnelPanel({
+					configEntry: config,
+					storeEntry: storeValues[config.configKey] || {}
+				}).Component({key: config.configKey})
 			)
 		}
 		{
-			postgresqlConnections?.map(({configKey}) => {
-				const configValues = storeValues[configKey];
-					// @ts-ignore
-				return <PostgresConnection
-						key={configKey}
-						{...configValues}
-					/>;
-				}
+			postgresqlConnections?.map(config =>
+				new PostgresqlConnectionPanel({
+					configEntry: config,
+					storeEntry: storeValues[config.configKey] || {}
+				}).Component({key: config.configKey})
 			)
 		}
 	</>

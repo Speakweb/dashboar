@@ -9,10 +9,10 @@ import { resolveStoreValues } from './lib/resolveStoreValues';
 
 const loadedConfiguration: DashboarConfig = require(join(process.cwd(), './dashboar-config'));
 
-console.log(loadedConfiguration);
+const storeFileIsEncrypted = !process.argv.includes('--plaintext-store')
 
 const runCLI = async () => {
-	const storeValues = await resolveStoreValues(loadedConfiguration);
+	const storeValues = await resolveStoreValues({config: loadedConfiguration, storeFileIsEncrypted});
 
 	render(<Ui
 		config={loadedConfiguration}
