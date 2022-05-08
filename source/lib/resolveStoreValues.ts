@@ -21,7 +21,8 @@ const d = debug('resolve-store-values');
 
 dotenv.config();
 
-const storeFilePath = "dashboar-store";
+const encryptedStoreFilePath = "dashboar-store";
+const plainStoreFilePath = 'dashboar-store.json';
 
 const resolveStringFunc = (s: StringOrStringFunc) => {
 	return typeof s === 'function' ? s() : s;
@@ -42,7 +43,7 @@ const getStorePassword = async ({cli, prompt}: {cli: Interface, prompt: string})
 		cli.question(prompt, async (pw: string) => {
 			if (!pw.length) reject("Store password cannot be empty");
 			else {
-				if (!existsSync(storeFilePath)) console.log(`Created ${storeFilePath}`);
+				if (!existsSync(encryptedStoreFilePath)) console.log(`Created ${encryptedStoreFilePath}`);
 				resolve(pw);
 			}
 		});
@@ -76,22 +77,21 @@ const readStoreFromEncryptedFile = async ({cli}:{cli: Interface}): Promise<{ sto
 	let password = "";
 	let decryptedData = null;
 	while (decryptedData === null) {
-		password = await getStorePassword({cli, prompt: `What is the password for ${storeFilePath}?`});
-		const storeFileBytes = await fs.readFile(storeFilePath);
+		password = await getStorePassword({cli, prompt: `What is the password for ${encryptedStoreFilePath}?`});
+		const storeFileBytes = await fs.readFile(encryptedStoreFilePath);
 		const encryptedData = storeFileBytes.toString().replace(/['"]+/g, "");
 		decryptedData = decrypt(password, encryptedData);
 		if (decryptedData === null) {
-			console.log(`Invalid store password for ${storeFilePath}`)
+			console.log(`Invalid store password for ${encryptedStoreFilePath}`)
 		}
 	}
 	const storeValues: StoreValues = JSON.parse(decryptedData);
 	return {storeValues, password}
 };
 
-const readStoreFromPlainFile = async () => {
-	const text = (await fs.readFile(storeFilePath)).toString();
-	let parse = JSON.parse(text);
-	return parse
+const readStoreFromPlainFile = async (filePath: string) => {
+	const text = (await fs.readFile(filePath)).toString();
+	return JSON.parse(text)
 }
 
 type StoreParameterConfiguration = { storeParameterKey: string, storeParameterSchema: StoreParameterSchema, configKey: string };
@@ -152,7 +152,8 @@ export const resolveAllStoreValues = async (
 				const sourcesListElement = sourcesList[j] as SourceSchema;
 				const {sourceIsPromptString, sourceIsPromptFunction, sourceIsPromptObject} = getSourcePromptType(sourcesListElement);
 				const isPrompt = sourceIsPromptObject || sourceIsPromptFunction || sourceIsPromptString;
-				const isEnvironment = (sourcesListElement as SourceEnvironmentSchema).envKey;
+				const envKey = (sourcesListElement as SourceEnvironmentSchema).envKey;
+				const isEnvironment = Boolean(envKey);
 				if (isPrompt) {
 					let promptString = '';
 					if (sourceIsPromptObject) {
@@ -168,11 +169,11 @@ export const resolveAllStoreValues = async (
 					break;
 				}
 				if (isEnvironment) {
-					const environmentValue = process.env[(sourcesListElement as SourceEnvironmentSchema).envKey];
+					const environmentValue = process.env[envKey];
 					// @ts-ignore
 					currentStore[configKey][storeParameterKey] = environmentValue;
 					if (!environmentValue) {
-						console.log(`Could not find an environment value for ${environmentValue}`);
+						console.log(`Could not find an environment value for ${envKey}`);
 					}else {
 						break;
 					}
@@ -187,10 +188,10 @@ export const resolveAllStoreValues = async (
 
 export const saveEncryptedStore = async ({storeValues, password}:{storeValues: StoreValues, password: string}) => {
 	const encryptedData = encrypt(password, JSON.stringify(storeValues));
-	await fs.writeFile(storeFilePath, JSON.stringify(encryptedData));
+	await fs.writeFile(encryptedStoreFilePath, JSON.stringify(encryptedData));
 }
-export const savePlaintextStore = async ({storeValues}:{storeValues: StoreValues }) => {
-	await fs.writeFile(storeFilePath, JSON.stringify(storeValues));
+export const savePlaintextStore = async ({storeValues, filePath}:{storeValues: StoreValues, filePath: string }) => {
+	await fs.writeFile(filePath, JSON.stringify(storeValues));
 }
 
 async function resolveEncryptedStoreFile(storeFileExists: boolean, cli: Interface, config: DashboarConfig) {
@@ -203,7 +204,7 @@ async function resolveEncryptedStoreFile(storeFileExists: boolean, cli: Interfac
 		const storeValues = await resolveAllStoreValues({config, currentStore: {}, cli});
 		await saveEncryptedStore({
 			storeValues,
-			password: await getStorePassword({cli, prompt: `Set the password for ${storeFilePath}`})
+			password: await getStorePassword({cli, prompt: `Set the password for ${encryptedStoreFilePath}`})
 		})
 		return storeValues;
 	}
@@ -211,7 +212,7 @@ async function resolveEncryptedStoreFile(storeFileExists: boolean, cli: Interfac
 
 export const resolveStoreValues = async ({config, storeFileIsEncrypted}:{config: DashboarConfig, storeFileIsEncrypted: boolean}) => {
 	const cli = getCommandPromptInterface();
-	const storeFileExists = existsSync(storeFilePath);
+	const storeFileExists = existsSync(storeFileIsEncrypted ? encryptedStoreFilePath : plainStoreFilePath);
 	if (storeFileIsEncrypted) {
 		return await resolveEncryptedStoreFile(storeFileExists, cli, config);
 	}
@@ -220,13 +221,13 @@ export const resolveStoreValues = async ({config, storeFileIsEncrypted}:{config:
 
 async function resolvePlainStoreFile({storeFileExists, cli, config}:{storeFileExists: boolean, cli: Interface, config: DashboarConfig}) {
 	if (storeFileExists) {
-		const existingStore = await readStoreFromPlainFile();
+		const existingStore = await readStoreFromPlainFile(plainStoreFilePath);
 		const storeValues = await resolveAllStoreValues({currentStore: existingStore, config, cli});
-		await savePlaintextStore({storeValues})
+		await savePlaintextStore({storeValues, filePath: plainStoreFilePath})
 		return storeValues;
 	} else {
 		const storeValues = await resolveAllStoreValues({config, currentStore: {}, cli});
-		await savePlaintextStore({storeValues})
+		await savePlaintextStore({storeValues, filePath: plainStoreFilePath})
 		return storeValues;
 	}
 }

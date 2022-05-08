@@ -5,12 +5,14 @@ module.exports = {
 		{
 			configKey: "LanguageTrainer keycloak ssh tunnel",
 			storeParameters: {
-				keyCloakSshTunnel: {
-					sources: {
-						type: "string",
-						prompt: "Keycloak ssh tunnel (ex. ssh -L 8080:localhost:8080 root@165.227.49.247):"
-					}
-				},
+				username: "ssh tunnel username eg. root",
+				password: "ssh tunnel password eg. icecream99",
+				host: "ssh tunnel host eg. 165.227.49.247",
+				port: "ssh tunnel port eg. 22",
+				dstHost: "ssh tunnel destination host eg. 127.0.0.1",
+				dstPort: "ssh tunnel destination port eg. 8080",
+				localHost:"ssh tunnel local host eg. 127.0.0.1",
+				localPort: "ssh tunnel destination port eg. 22"
 			},
 			command: ({keyCloakSshTunnel}) => keyCloakSshTunnel
 		},

@@ -8,7 +8,7 @@ export class PostgresqlConnectionPanel extends DashboarPanel<PostgresqlConnectio
         const requiredKeys = ['user', 'host', 'database', 'password', 'port'];
         const missingKeys = requiredKeys.filter(key => !this.storeEntry[key]);
         if (missingKeys.length) {
-            return `Please set the following store values under ${this.configEntry.configKey} to monitor this postgres connection ${missingKeys.join(',')}`
+            return `Please set the following environment variable values ${this.configEntry.configKey} to monitor this postgres connection ${missingKeys.join(',')}`
         }
         return;
     }
