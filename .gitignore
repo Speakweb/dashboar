@@ -3,3 +3,4 @@ node_modules
 dist
 package-lock.json
 dashboar-config.js
+dashboar-store*
