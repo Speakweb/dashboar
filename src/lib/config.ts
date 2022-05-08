@@ -11,7 +11,7 @@ export type SourceEnvironmentSchema = {
 }
 
 export type SourcePromptSchema = {
-	type?: string | number;
+	type?: "string" | "number";
 	sourceType: ConfigSources.Prompt;
 	prompt: string | (() => string)
 }

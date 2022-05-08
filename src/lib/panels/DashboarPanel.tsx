@@ -33,7 +33,7 @@ export abstract class DashboarPanel<T> {
 	 */
 	abstract pane(): ReactElement
 	/**
-	 * If we can't find a value from any source, output the error messages
+	 * If we can't find a value from any src, output the error messages
 	 */
 	abstract errorMessage(): string | undefined
 

@@ -37,8 +37,7 @@ export const SshTunnel = (
 			localPort,
 		};
 
-		tunnel(config, function (error, server, ...args) {
-			console.log(args);
+		tunnel(config, function (error, server) {
 			if (error) {
 				setLatestError(error);
 				return;
