@@ -3,9 +3,11 @@ import RepeatCommand from './components/RepeatCommand';
 import {PullRequest} from './components/PullRequestList';
 import {PullRequests} from "./components/PullRequests";
 import {Box} from 'ink';
-import {DashboarConfig, StoreValues} from "./lib/config";
+import {StoreValues} from "./lib/config";
 import {PostgresqlConnectionPanel} from "./lib/panels/PostgresqlConnectionPanel";
 import {SshTunnelPanel} from "./lib/panels/SshTunnelPanel";
+import {EnvironmentVariablesPanel} from "./lib/panels/EnvironmentVariablesPanel";
+import {DashboarConfig} from "./lib/DashboarConfig";
 
 const Ui = (
 	{
@@ -13,7 +15,8 @@ const Ui = (
 			repeatCommands,
 			pullRequestConfigs,
 			sshTunnels,
-			postgresqlConnections
+			postgresqlConnections,
+			watchedEnvironmentVariables
 		},
 		pullRequestFetchFunction,
 		storeValues
@@ -61,6 +64,9 @@ const Ui = (
 					storeEntry: storeValues[config.configKey] || {}
 				}).Component({key: config.configKey})
 			)
+		}
+		{
+			watchedEnvironmentVariables?.map((variableList: string[], index: number) => new EnvironmentVariablesPanel(variableList).Component({key: index}) )
 		}
 	</>
 ;

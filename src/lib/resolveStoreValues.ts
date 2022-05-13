@@ -3,7 +3,6 @@ import {existsSync} from "fs";
 import {flatten} from "lodash";
 import {
 	ConfigWithStoreParameters,
-	DashboarConfig,
 	SourceEnvironmentSchema,
 	SourcePromptSchema,
 	SourceSchema,
@@ -20,6 +19,7 @@ import {getSourcePromptType} from "./getSourcePromptType";
 import {StoreParameterConfiguration} from "./storeParameterConfiguration";
 import {resolveEncryptedStoreFile} from "./resolveEncryptedStoreFile";
 import {resolvePlainStoreFile} from "./resolvePlainStoreFile";
+import {DashboarConfig} from "./DashboarConfig";
 
 
 const d = debug('resolve-store-values');

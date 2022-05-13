@@ -4,8 +4,8 @@ import {render} from 'ink';
 import Ui from './ui';
 import {join} from "path";
 import {fetchPullRequests} from "./lib/fetchBitbucket";
-import {DashboarConfig} from "./lib/config";
 import { resolveStoreValues } from './lib/resolveStoreValues';
+import {DashboarConfig} from "./lib/DashboarConfig";
 
 const loadedConfiguration: DashboarConfig = require(join(process.cwd(), './dashboar-config'));
 

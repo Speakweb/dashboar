@@ -1,7 +1,7 @@
 import { Text } from "ink";
 import React from "react";
 
-export const EnvironmentVariablesList: React.FC<{ envVarList: [string] }> = ({envVarList}) => {
+export const EnvironmentVariablesList: React.FC<{ envVarList: string[] }> = ({envVarList}) => {
   return (
     <>
       {envVarList.map((envVar) => (

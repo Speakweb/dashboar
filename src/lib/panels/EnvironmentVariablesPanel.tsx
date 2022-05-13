@@ -3,9 +3,9 @@ import { Box } from "ink";
 import { EnvironmentVariablesList } from "../../components/EnvironmentVariablesList";
 
 export class EnvironmentVariablesPanel {
-  protected envVarList: [string];
+  protected envVarList: string[];
 
-  constructor(envVarList: [string]) {
+  constructor(envVarList: string[]) {
     this.envVarList = envVarList;
   }
 
