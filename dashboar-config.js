@@ -11,7 +11,7 @@ module.exports = {
 				port: "ssh tunnel port eg. 22",
 				dstHost: "ssh tunnel destination host eg. 127.0.0.1",
 				dstPort: "ssh tunnel destination port eg. 8080",
-				localHost:"ssh tunnel local host eg. 127.0.0.1",
+				localHost: "ssh tunnel local host eg. 127.0.0.1",
 				localPort: "ssh tunnel destination port eg. 22"
 			},
 			command: ({keyCloakSshTunnel}) => keyCloakSshTunnel
@@ -61,5 +61,39 @@ module.exports = {
 			// Ping the keycloak instance
 			command: 'echo "Pinging keycloak on localhost:8080"; ping localhost:8080',
 		},
+	],
+	watchedEnvironmentVariables: [
+		[
+			"TYPEORM_HOST",
+			"TYPEORM_USERNAME",
+			"TYPEORM_PASSWORD",
+			"TYPEORM_DATABASE",
+			"TYPEORM_PORT",
+			"TYPEORM_MIGRATIONS_RUN",
+			"CLOUD_CONVERT_API_KEY",
+			"SANDBOX_CLOUD_CONVERT_API_KEY",
+			"PUBLIC_URL",
+			"PROD",
+			"READING_DOCUMENTS_DIR",
+			"TEST_READING_DOCUMENTS_DIR",
+			"FREQUENCY_DOCUMENTS_DIR",
+			"TEST_FREQUENCY_DOCUMENTS_DIR",
+			"DOCUMENT_S3_ACCESS_KEY_ID",
+			"DOCUMENT_S3_ACCESS_KEY_SECRET",
+			"DOCUMENT_S3_ACCESS_KEY_ID",
+			"DOCUMENT_CONVERTER_OUTPUT_S3_ACCESS_KEY_SECRET",
+			"DOCUMENT_S3_REGION",
+			"DOCUMENT_S3_BUCKET",
+			"AZURE_IMAGE_SEARCH_ENDPOINT",
+			"AZURE_IMAGE_SEARCH_KEY",
+			"SESSION_SECRET_KEY",
+			"HTTP_PORT",
+			"SYTHTHESIZED_WAV_CACHE_DIR",
+			"AZURE_SPEECH_LOCATION",
+			"AZURE_SPEECH_KEY1",
+			"AZURE_TRANSLATOR_KEY1",
+			"AZURE_TRANSLATOR_REGION",
+			"VIDEO_DIR"
+		]
 	]
 }

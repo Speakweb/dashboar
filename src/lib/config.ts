@@ -77,9 +77,5 @@ export type SshTunnelConfig<T extends StoreValuesForOneConfig = {}> = {
 	command: string | ((storeParameters: T) => string)
 } & ConfigWithStoreParameters<T>
 
-export type DashboarConfig = {
-	repeatCommands?: RepeatCommandConfig[],
-	pullRequestConfigs?: BitbucketPrConfig[]
-	sshTunnels?: SshTunnelConfig[]
-	postgresqlConnections?: PostgresqlConnectionConfig[]
-};
+export type WatchedEnvironmentVariablesConfig = string[]
+
