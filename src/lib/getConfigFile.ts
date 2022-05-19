@@ -24,7 +24,7 @@ const getFileFromUrl = (path: string) => {
 
 export const getConfigFile = async () => {
     const commandArgs = process.argv.slice(2); // slices the command args array so that only the arguments are remaining
-    const configFileIdx = commandArgs.indexOf("configFile");
+    const configFileIdx = commandArgs.indexOf("config-file");
     let configFile: DashboarConfig = require(join(process.cwd(), "./dashboar-config"));
     if (configFileIdx < 0 || !commandArgs.length) {
         return configFile;
