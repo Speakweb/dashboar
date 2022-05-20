@@ -5,6 +5,7 @@ import {PullRequests} from "./components/PullRequests";
 import {Box} from 'ink';
 import {StoreValues} from "./lib/config";
 import {PostgresqlConnectionPanel} from "./lib/panels/PostgresqlConnectionPanel";
+import {RepositoryConnectionPanel} from "./lib/panels/RepositoryConnectionPanel";
 import {SshTunnelPanel} from "./lib/panels/SshTunnelPanel";
 import {EnvironmentVariablesPanel} from "./lib/panels/EnvironmentVariablesPanel";
 import {DashboarConfig} from "./lib/DashboarConfig";
@@ -18,7 +19,8 @@ const Ui = (
 			sshTunnels,
 			healthChecks,
 			postgresqlConnections,
-			watchedEnvironmentVariables
+			watchedEnvironmentVariables,
+			repositoryConfigs
 		},
 		pullRequestFetchFunction,
 		storeValues
@@ -70,6 +72,14 @@ const Ui = (
 		{
 			postgresqlConnections?.map(config =>
 				new PostgresqlConnectionPanel({
+					configEntry: config,
+					storeEntry: storeValues[config.configKey] || {}
+				}).Component({key: config.configKey})
+			)
+		}
+		{
+			repositoryConfigs?.map(config =>
+				new RepositoryConnectionPanel({
 					configEntry: config,
 					storeEntry: storeValues[config.configKey] || {}
 				}).Component({key: config.configKey})

@@ -4,7 +4,8 @@ import {
 	HealthCheckConfig,
     RepeatCommandConfig,
     SshTunnelConfig,
-    WatchedEnvironmentVariablesConfig
+    WatchedEnvironmentVariablesConfig,
+    RepositoryConfig
 } from "./config";
 
 export type DashboarConfig = {
@@ -14,4 +15,5 @@ export type DashboarConfig = {
 	healthChecks?: HealthCheckConfig[],
 	postgresqlConnections?: PostgresqlConnectionConfig[],
     watchedEnvironmentVariables?: WatchedEnvironmentVariablesConfig[],
+	repositoryConfigs?: RepositoryConfig[]
 };

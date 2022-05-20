@@ -1,4 +1,12 @@
 module.exports = {
-  repositoryConfigs: [{url: "https://github.com/marvinirwin/epub-finder"}]
+	repositoryConfigs: [
+		{
+			configKey: "something something",
+			url: ["https://github.com/marvinirwin/epub-finder"]
+		},
+		{
+			configKey: "something something",
+			url: ["https://github.com/marvinirwin/graph-paper"]
+		},
+	]
 }
-
