@@ -2,11 +2,11 @@ module.exports = {
 	repositoryConfigs: [
 		{
 			configKey: "something something",
-			url: ["https://github.com/marvinirwin/epub-finder"]
+			urls: ["https://github.com/marvinirwin/epub-finder"]
 		},
 		{
-			configKey: "something something",
-			url: ["https://github.com/marvinirwin/graph-paper"]
-		},
+			configKey: "something something2",
+			urls: ["https://github.com/marvinirwin/graph-paper", "https://git.patchysicp.xyz/patchysicp/patchyIRCD.git"]
+		}
 	]
 }
