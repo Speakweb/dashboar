@@ -7,7 +7,7 @@ import { resolveStoreValues } from './lib/resolveStoreValues';
 import {DashboarConfig} from "./lib/DashboarConfig";
 import { getConfigFile } from './lib/getConfigFile';
 
-const storeFileIsEncrypted = !process.argv.includes('--plaintext-store')
+const storeFileIsEncrypted = process.argv.includes('--encrypted-store');
 
 const runCLI = async () => {
 	const loadedConfiguration: DashboarConfig = await getConfigFile();
