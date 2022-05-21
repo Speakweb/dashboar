@@ -14,7 +14,7 @@ export class RepositoryConnectionPanel extends DashboarPanel<RepositoryConfig> {
 	}
 
 	pane() {
-		const configValues = this.configEntry as unknown as { urls: string[]; };
+		const configValues = this.configEntry as unknown as { url: string; };
 		return <RepositoryConnection
 			key={this.configEntry.configKey}
 			{...configValues}
@@ -22,64 +22,45 @@ export class RepositoryConnectionPanel extends DashboarPanel<RepositoryConfig> {
 	}
 }
 
-
-const RepositoryConnection = ({urls}: { urls: string[] }) => {
-	const [latestMessage, setLatestMessage] = useState<any>();
+const RepositoryConnection = ({url}: { url: string }) => {
+	const [latestMessage, setLatestMessage] = useState<JSX.Element>(<Text>Loading...</Text>);
 	const [latestError, setLatestError] = useState<any>();
 
 	useEffect(() => {
-		const fetchRepos = async () => {
-			let texts = new Map<Repository, string>();
+		const fetchRepo = async () => {
+			const name = getRepoName(url);
 
-			const updateMessage = (repository: Repository, text: string) => {
-				texts.set(repository, text);
-				let mappedTexts = [];
-				for (const [repo, text] of texts.entries()) {
-					mappedTexts.push(`${repo.name}: ${text}`);
-				}
-
+			const updateMessage = (text: string) => {
 				setLatestMessage(
-					<Text>
-						{mappedTexts.join("\n")}
-					</Text>
+					<Text>{name}: {text}</Text>
 				);
 			}
 
-			for (const url of urls) {
-				const name = getRepoName(url);
-				texts.set(new Repository(url, name), "Loading...");
+			const exists = await fileExists(name);
+			if (exists) {
+				updateMessage("Exists");
+			} else {
+				updateMessage("Cloning");
+				await simplegit().clone(url, process.cwd() + "/" + name);
+				updateMessage("Cloned");
 			}
 
-			for (const repo of texts.keys()) {
-				const { name, url } = repo;
-				const exists = await fileExists(name);
-				if (exists) {
-					updateMessage(repo, "Exists");
-				} else {
-					updateMessage(repo, "Cloning");
-					await simplegit().clone(url, process.cwd() + "/" + name);
-					updateMessage(repo, "Cloned");
-				}
-				const branch = await simplegit(process.cwd() + "/" + name).branch();
-				updateMessage(repo, branch.current);
-			}
+			const branch = await simplegit(process.cwd() + "/" + name).branch();
+			updateMessage(branch.current);
 
 			const timer = setInterval(async () => {
-				for (const repo of texts.keys()) {
-					const branch = await simplegit(process.cwd() + "/" + repo.name).branch();
-					updateMessage(repo, branch.current);
-				}
+				const branch = await simplegit(process.cwd() + "/" + name).branch();
+				updateMessage(branch.current);
 			}, 5000);
 
 			return () => clearInterval(timer);
 		}
 
-		setLatestMessage("Loading...");
-		fetchRepos().catch(setLatestError);
-	}, [urls])
+		fetchRepo().catch(setLatestError);
+	}, [url])
 
 	if (latestError) {
-		return <Text>{JSON.stringify(latestError) + "hi"}</Text>
+		return <Text>{JSON.stringify(latestError)}</Text>
 	}
 	return <Text>{latestMessage}</Text>
 }
@@ -98,15 +79,5 @@ const fileExists = async (name: string): Promise<boolean> => {
 		return true;
 	} catch (error) {
 		return false;
-	}
-}
-
-class Repository {
-	public url: string;
-	public name: string;
-
-	constructor(url: string, name: string) {
-		this.url = url;
-		this.name = name;
 	}
 }
