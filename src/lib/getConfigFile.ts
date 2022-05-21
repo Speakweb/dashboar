@@ -40,7 +40,7 @@ export const getConfigFile = async () => {
             configFile = require(join(process.cwd(), configFilePath));
         }
     } catch (error) {
-        console.log("There was an error loading the custom config file. Using the default dashboar-config.js\n", error);
+        console.log("There was an error loading the custom config file. Using the default languagetrainer-config.js\n", error);
     } finally {
         return configFile;
     }

@@ -16,7 +16,7 @@ const Ui = (
 			repeatCommands,
 			pullRequestConfigs,
 			sshTunnels,
-			healthCheck,
+			healthChecks,
 			postgresqlConnections,
 			watchedEnvironmentVariables
 		},
@@ -60,7 +60,7 @@ const Ui = (
 			)
 		}
 		{
-			healthCheck?.map((config) =>
+			healthChecks?.map((config) =>
 				new HealthCheckPanel({
 						configEntry: config,
 						storeEntry: storeValues[config.configKey] || {}

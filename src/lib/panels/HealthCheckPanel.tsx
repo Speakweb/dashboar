@@ -2,6 +2,7 @@ import {HealthCheckConfig} from "../config";
 import React, {useEffect, useState} from "react";
 import {DashboarPanel} from "./DashboarPanel";
 import {Text} from "ink";
+import fetch from 'node-fetch';
 
 export class HealthCheckPanel extends DashboarPanel<HealthCheckConfig> {
 	errorMessage(): string | undefined {

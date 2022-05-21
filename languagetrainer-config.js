@@ -101,5 +101,17 @@ module.exports = {
 			"TYPEORM_ENTITIES",
 			"TYPEORM_MIGRATIONS"
 		]
+	],
+	healthChecks: [
+		{
+			url: "http://localhost:3000",
+			failureMessage: "The LanguageTrainer client is not running on localhost:3000.  Run `npm run start` in the `reader` directory to start it",
+			successMessage: "LanguageTrainer is running on http://localhost:3000 !",
+		},
+		{
+			url: "http://localhost:3001",
+			failureMessage: "The LanguageTrainer server is not running on localhost:3001.  Run `npm run start` in the `reader` directory to start it",
+			successMessage: "The LanguageTrainer server is running on localhost:3001.  Run `npm run start` in the `reader` directory to start it",
+		},
 	]
 }

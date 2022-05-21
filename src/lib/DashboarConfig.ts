@@ -11,7 +11,7 @@ export type DashboarConfig = {
     repeatCommands?: RepeatCommandConfig[],
     pullRequestConfigs?: BitbucketPrConfig[],
     sshTunnels?: SshTunnelConfig[],
-	healthCheck?: HealthCheckConfig[],
+	healthChecks?: HealthCheckConfig[],
 	postgresqlConnections?: PostgresqlConnectionConfig[],
-    watchedEnvironmentVariables?: WatchedEnvironmentVariablesConfig[]
+    watchedEnvironmentVariables?: WatchedEnvironmentVariablesConfig[],
 };
