@@ -8,6 +8,7 @@ import {PostgresqlConnectionPanel} from "./lib/panels/PostgresqlConnectionPanel"
 import {SshTunnelPanel} from "./lib/panels/SshTunnelPanel";
 import {EnvironmentVariablesPanel} from "./lib/panels/EnvironmentVariablesPanel";
 import {DashboarConfig} from "./lib/DashboarConfig";
+import {HealthCheckPanel} from "./lib/panels/HealthCheckPanel";
 
 const Ui = (
 	{
@@ -15,6 +16,7 @@ const Ui = (
 			repeatCommands,
 			pullRequestConfigs,
 			sshTunnels,
+			healthCheck,
 			postgresqlConnections,
 			watchedEnvironmentVariables
 		},
@@ -55,6 +57,14 @@ const Ui = (
 					configEntry: config,
 					storeEntry: storeValues[config.configKey] || {}
 				}).Component({key: config.configKey})
+			)
+		}
+		{
+			healthCheck?.map((config) =>
+				new HealthCheckPanel({
+						configEntry: config,
+						storeEntry: storeValues[config.configKey] || {}
+					}).Component({key: config.configKey})
 			)
 		}
 		{

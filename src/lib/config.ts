@@ -69,6 +69,10 @@ export type PostgresqlConnectionConfig = {
 	}
 }>;
 
+export type HealthCheckConfig<T extends StoreValuesForOneConfig = {}> = {
+	command: string | ((storeParameters: T) => string)
+} & ConfigWithStoreParameters<T>
+
 export type RepeatCommandConfig<T extends StoreValuesForOneConfig = {}> = {
 	command: string | ((storeParameters: T) => string)
 } & ConfigWithStoreParameters<T>

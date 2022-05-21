@@ -1,6 +1,7 @@
 import {
     BitbucketPrConfig,
     PostgresqlConnectionConfig,
+	HealthCheckConfig,
     RepeatCommandConfig,
     SshTunnelConfig,
     WatchedEnvironmentVariablesConfig
@@ -10,6 +11,7 @@ export type DashboarConfig = {
     repeatCommands?: RepeatCommandConfig[],
     pullRequestConfigs?: BitbucketPrConfig[],
     sshTunnels?: SshTunnelConfig[],
-    postgresqlConnections?: PostgresqlConnectionConfig[],
+	healthCheck?: HealthCheckConfig[],
+	postgresqlConnections?: PostgresqlConnectionConfig[],
     watchedEnvironmentVariables?: WatchedEnvironmentVariablesConfig[]
 };
