@@ -2,16 +2,16 @@
 import React from 'react';
 import {render} from 'ink';
 import Ui from './ui';
-import {join} from "path";
 import {fetchPullRequests} from "./lib/fetchBitbucket";
 import { resolveStoreValues } from './lib/resolveStoreValues';
 import {DashboarConfig} from "./lib/DashboarConfig";
-
-const loadedConfiguration: DashboarConfig = require(join(process.cwd(), './dashboar-config'));
+import { getConfigFile } from './lib/getConfigFile';
 
 const storeFileIsEncrypted = !process.argv.includes('--plaintext-store')
 
 const runCLI = async () => {
+	const loadedConfiguration: DashboarConfig = await getConfigFile();
+
 	const storeValues = await resolveStoreValues({config: loadedConfiguration, storeFileIsEncrypted});
 
 	render(<Ui
