@@ -1,6 +1,6 @@
 {
 	"name": "dashboar",
-	"version": "1.2.2",
+	"version": "1.2.3",
 	"license": "MIT",
 	"bin": "dist/cli.js",
 	"engines": {
@@ -11,7 +11,7 @@
 		"start": "npm run build && node dist/cli.js",
 		"pretest": "npm run build",
 		"test": "ava --verbose",
-		"prepare": "npm run builds"
+		"prepare": "npm run build"
 	},
 	"files": [
 		"dist/*"
