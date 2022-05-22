@@ -10,7 +10,8 @@
 		"build": "tsc",
 		"start": "npm run build && node dist/cli.js",
 		"pretest": "npm run build",
-		"test": "ava --verbose"
+		"test": "ava --verbose",
+		"prepare": "npm run builds"
 	},
 	"files": [
 		"dist/*"
