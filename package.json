@@ -1,6 +1,6 @@
 {
 	"name": "dashboar",
-	"version": "1.2.0",
+	"version": "1.2.2",
 	"license": "MIT",
 	"bin": "dist/cli.js",
 	"engines": {
@@ -13,7 +13,7 @@
 		"test": "ava --verbose"
 	},
 	"files": [
-		"dist/cli.js"
+		"dist/*"
 	],
 	"dependencies": {
 		"bitbucket": "^2.6.3",
