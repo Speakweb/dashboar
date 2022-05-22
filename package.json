@@ -26,6 +26,7 @@
 		"node-fetch": "^2.6.7",
 		"pg": "^8.7.3",
 		"react": "^16.14.0",
+		"simple-git": "^3.7.1",
 		"tunnel-ssh": "^4.1.6"
 	},
 	"ava": {

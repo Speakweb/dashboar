@@ -83,3 +83,7 @@ export type SshTunnelConfig<T extends StoreValuesForOneConfig = {}> = {
 
 export type WatchedEnvironmentVariablesConfig = string[]
 
+export type RepositoryConfig<T extends StoreValuesForOneConfig = {}> = {
+	command: string | ((storeParameters: T) => string)
+} & ConfigWithStoreParameters<T>
+
