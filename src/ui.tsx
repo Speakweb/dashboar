@@ -35,7 +35,9 @@ const Ui = (
 	}
 	) =>
 	<>
-		<Box borderStyle="single" flexDirection='column'>
+		{
+			watchedEnvironmentVariables?.map((variableList: string[], index: number) => new EnvironmentVariablesPanel(variableList).Component({key: index}) )
+		}
 			{
 				repeatCommands?.map(({command}) => {
 						const str = typeof command === 'string' ? command : command(storeValues);
@@ -43,7 +45,6 @@ const Ui = (
 					}
 				)
 			}
-		</Box>
 		{
 			pullRequestConfigs?.map(({storeParameters}) => <Box
 				key={`${storeParameters.workspace} ${storeParameters.repo}`}
@@ -55,38 +56,35 @@ const Ui = (
 			</Box>)
 		}
 		{
-			sshTunnels?.map((config) => new SshTunnelPanel({
+			sshTunnels?.map((config, i) => new SshTunnelPanel({
 					configEntry: config,
 					storeEntry: storeValues[config.configKey] || {}
-				}).Component({key: config.configKey})
+				}).Component({key: config.configKey || i})
 			)
 		}
 		{
-			healthChecks?.map((config) =>
+			healthChecks?.map((config, i) =>
 				new HealthCheckPanel({
 						configEntry: config,
 						storeEntry: storeValues[config.configKey] || {}
-					}).Component({key: config.configKey})
+					}).Component({key: config.configKey || i})
 			)
 		}
 		{
-			postgresqlConnections?.map(config =>
+			postgresqlConnections?.map((config, i) =>
 				new PostgresqlConnectionPanel({
 					configEntry: config,
 					storeEntry: storeValues[config.configKey] || {}
-				}).Component({key: config.configKey})
+				}).Component({key: config.configKey || i})
 			)
 		}
 		{
-			repositoryConfigs?.map(config =>
+			repositoryConfigs?.map((config, i) =>
 				new RepositoryConnectionPanel({
 					configEntry: config,
 					storeEntry: storeValues[config.configKey] || {}
-				}).Component({key: config.configKey})
+				}).Component({key: config.configKey || i})
 			)
-		}
-		{
-			watchedEnvironmentVariables?.map((variableList: string[], index: number) => new EnvironmentVariablesPanel(variableList).Component({key: index}) )
 		}
 	</>
 ;

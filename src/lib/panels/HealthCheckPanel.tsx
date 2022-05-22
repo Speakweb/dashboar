@@ -37,11 +37,15 @@ export const HealthCheckConnection = (
 
 	useEffect(() => {
 		const fetchStatus = async () => {
-			const response = await fetch(url);
-  			if (response.ok) {
-				  setLatestMessage(<Text>{successMessage}</Text>);
-			} else {
-				  setLatestMessage(<Text>{failureMessage}</Text>)
+			try {
+				const response = await fetch(url);
+				if (response.ok) {
+					setLatestMessage(<Text>{successMessage}</Text>);
+				} else {
+					setLatestMessage(<Text>{failureMessage}</Text>)
+				}
+			} catch(e) {
+				setLatestMessage(<Text>{failureMessage}</Text>);
 			}
 		}
 
