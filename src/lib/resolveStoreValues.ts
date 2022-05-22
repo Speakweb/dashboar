@@ -36,12 +36,14 @@ export const resolveAllStoreValues = async (
 			pullRequestConfigs,
 			repeatCommands,
 			sshTunnels,
-			postgresqlConnections
+			postgresqlConnections,
+			...others
 		},
 		cli,
 	}: { currentStore: StoreValues, config: DashboarConfig, cli: Interface }): Promise<StoreValues> => {
 	// @ts-ignore
-	const configLists: ConfigWithStoreParameters<{}>[] = flatten([pullRequestConfigs, repeatCommands, sshTunnels, postgresqlConnections].filter(v => Boolean(v)));
+	const configLists: ConfigWithStoreParameters<{}>[] = flatten([pullRequestConfigs, repeatCommands, sshTunnels, postgresqlConnections, ...Object.values(others)]
+		.filter(v => Boolean(v) && Boolean(v.storeParameters)));
 	const storeValueSchemas: StoreParameterConfiguration[] = flatten(configLists
 		.map((v: ConfigWithStoreParameters<{}>) => {
 		return Object.entries(v.storeParameters).map(([storeParameterKey, storeParameterSchema]) => ({

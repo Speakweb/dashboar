@@ -13,7 +13,7 @@
 		"test": "ava --verbose"
 	},
 	"files": [
-		"dist/cli.js"
+		"dist/*"
 	],
 	"dependencies": {
 		"bitbucket": "^2.6.3",

@@ -56,10 +56,12 @@ const Ui = (
 			</Box>)
 		}
 		{
-			sshTunnels?.map((config, i) => new SshTunnelPanel({
-					configEntry: config,
-					storeEntry: storeValues[config.configKey] || {}
-				}).Component({key: config.configKey || i})
+			sshTunnels?.map((config, i) => {
+					return new SshTunnelPanel({
+						configEntry: config,
+						storeEntry: storeValues[config.configKey] || {}
+					}).Component({key: config.configKey || i});
+				}
 			)
 		}
 		{
