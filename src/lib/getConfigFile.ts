@@ -1,20 +1,11 @@
 import { join } from "path";
 import { DashboarConfig } from "./DashboarConfig";
-import fs from "fs";
-const fsPromises = fs.promises;
-
-// using 'import' syntax with node-fetch version 3 causes an error
-// but using 'require' with version 2 works
-const fetch = require("node-fetch");
+const requireFromUrl = require('require-from-url/sync');
 
 const getFileFromUrl = (path: string) => {
     return new Promise<DashboarConfig>(async (resolve, reject) => {
         try {
-            const res = await fetch(path);
-            const responseArrayBuffer = await res.arrayBuffer();
-            const filePath = join(process.cwd(), "./dashboar-config.custom.js");
-            await fsPromises.writeFile(filePath, Buffer.from(responseArrayBuffer));
-            const configFile = require(filePath);
+            const configFile: DashboarConfig = requireFromUrl(path);
             resolve(configFile);
         } catch (error) {
             reject(error);
