@@ -5,6 +5,7 @@ import {Text} from "ink";
 import * as fs from "fs/promises";
 import * as constants from "constants";
 import simplegit from "simple-git";
+import {join, sep} from 'path'
 
 
 export class RepositoryConnectionPanel extends DashboarPanel<RepositoryConfig> {
@@ -22,34 +23,46 @@ export class RepositoryConnectionPanel extends DashboarPanel<RepositoryConfig> {
 	}
 }
 
+async function getBranch(cloneDestinationDirectory: string) {
+	return await simplegit(cloneDestinationDirectory).branch();
+}
+
 const RepositoryConnection = ({url}: { url: string }) => {
 	const [latestMessage, setLatestMessage] = useState<JSX.Element>(<Text>Loading...</Text>);
 	const [latestError, setLatestError] = useState<any>();
 
 	useEffect(() => {
 		const fetchRepo = async () => {
-			const name = getRepoName(url);
+			const repoName = getRepoName(url);
 
 			const updateMessage = (text: string) => {
 				setLatestMessage(
-					<Text>{name}: {text}</Text>
+					<Text>{repoName}: {text}</Text>
 				);
 			}
 
-			const exists = await fileExists(name);
-			if (exists) {
-				updateMessage("Exists");
+			const cloneDestinationDirectory = join(process.cwd(), repoName);
+			const isDirectlyAboveRepository = await pathExists(repoName);
+			const isSomewhereUnderRepository = process.cwd().split(sep).includes(repoName);
+			let repoPath: string = "";
+
+			if (isDirectlyAboveRepository) {
+				repoPath = cloneDestinationDirectory;
+			}else
+			if (isSomewhereUnderRepository) {
+				repoPath = process.cwd().split(sep).slice(0, process.cwd().indexOf(repoName)).join(sep);
 			} else {
-				updateMessage("Cloning");
-				await simplegit().clone(url, process.cwd() + "/" + name);
-				updateMessage("Cloned");
+				updateMessage(`Cloning ${cloneDestinationDirectory}`);
+				await simplegit().clone(url, cloneDestinationDirectory);
+				updateMessage(`Cloned ${cloneDestinationDirectory}`);
+				repoPath = cloneDestinationDirectory;
 			}
 
-			const branch = await simplegit(process.cwd() + "/" + name).branch();
+			const branch = await getBranch(repoPath);
 			updateMessage(branch.current);
 
 			const timer = setInterval(async () => {
-				const branch = await simplegit(process.cwd() + "/" + name).branch();
+				const branch = await getBranch(repoPath);
 				updateMessage(branch.current);
 			}, 5000);
 
@@ -73,7 +86,7 @@ const getRepoName = (url: string): string => {
 	return match;
 }
 
-const fileExists = async (name: string): Promise<boolean> => {
+const pathExists = async (name: string): Promise<boolean> => {
 	try {
 		await fs.access(name, constants.F_OK | constants.R_OK | constants.W_OK);
 		return true;
