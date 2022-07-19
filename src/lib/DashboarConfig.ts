@@ -1,19 +1,20 @@
 import {
-    BitbucketPrConfig,
-    PostgresqlConnectionConfig,
+	BitbucketPrConfig,
+	PostgresqlConnectionConfig,
 	HealthCheckConfig,
-    RepeatCommandConfig,
-    SshTunnelConfig,
-    WatchedEnvironmentVariablesConfig,
-    RepositoryConfig
+	RepeatCommandConfig,
+	SshTunnelConfig,
+	WatchedEnvironmentVariablesConfig,
+	RepositoryConfig, JavascriptFunctionConfig
 } from "./config";
 
 export type DashboarConfig = {
-    repeatCommands?: RepeatCommandConfig[],
-    pullRequestConfigs?: BitbucketPrConfig[],
-    sshTunnels?: SshTunnelConfig[],
+	repeatCommands?: RepeatCommandConfig[],
+	pullRequestConfigs?: BitbucketPrConfig[],
+	sshTunnels?: SshTunnelConfig[],
 	healthChecks?: HealthCheckConfig[],
 	postgresqlConnections?: PostgresqlConnectionConfig[],
-    watchedEnvironmentVariables?: WatchedEnvironmentVariablesConfig[],
+	watchedEnvironmentVariables?: WatchedEnvironmentVariablesConfig[],
 	repositoryConfigs?: RepositoryConfig[]
+	javascriptFunctions?: JavascriptFunctionConfig[]
 };

@@ -77,6 +77,10 @@ export type RepeatCommandConfig<T extends StoreValuesForOneConfig = {}> = {
 	command: string | ((storeParameters: T) => string)
 } & ConfigWithStoreParameters<T>
 
+export type JavascriptFunctionConfig<T extends StoreValuesForOneConfig = {}> = {
+	func: ((storeParameters: T) => Promise<string> | string)
+} & ConfigWithStoreParameters<T>
+
 export type SshTunnelConfig<T extends StoreValuesForOneConfig = {}> = {
 	command: string | ((storeParameters: T) => string)
 } & ConfigWithStoreParameters<T>
