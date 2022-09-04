@@ -1,6 +1,6 @@
 import React from "react";
 import { Box } from "ink";
-import { EnvironmentVariablesList } from "../../components/EnvironmentVariablesList";
+import { EnvironmentVariablesList } from "../components/EnvironmentVariablesList";
 
 export class EnvironmentVariablesPanel {
   protected envVarList: string[];

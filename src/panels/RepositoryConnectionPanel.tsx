@@ -1,4 +1,4 @@
-import {RepositoryConfig} from "../config";
+import {RepositoryConfig} from "../lib/config";
 import React, {useEffect, useState} from "react";
 import {DashboarPanel} from "./DashboarPanel";
 import {Text} from "ink";

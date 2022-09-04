@@ -1,5 +1,5 @@
-import {PostgresqlConnectionConfig} from "../config";
-import {PostgresConnection} from "../../components/PostgresConnection";
+import {PostgresqlConnectionConfig} from "../lib/config";
+import {PostgresConnection} from "../components/PostgresConnection";
 import React from "react";
 import {DashboarPanel} from "./DashboarPanel";
 

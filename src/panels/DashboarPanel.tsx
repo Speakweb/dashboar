@@ -1,4 +1,4 @@
-import {StoreValueType} from "../config";
+import {StoreValueType} from "../lib/config";
 import React, {ReactElement} from "react";
 import {Box, Text} from "ink";
 
