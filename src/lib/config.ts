@@ -56,6 +56,10 @@ export type PostgresqlConnectionParameters = {
 	port: number
 }
 
+/**
+ * @Doc
+ * Attempt to connect to a postgres database and display whether it succeeded or failed
+ */
 export type PostgresqlConnectionConfig = {
 	connectionLabel: string | ((storeParameters: PostgresqlConnectionParameters) => string)
 // @ts-ignore
@@ -68,25 +72,58 @@ export type PostgresqlConnectionConfig = {
 		postgresqlPort: StoreParameterSchema
 	}
 }>;
-
+/**
+ * Execute a GET http request to a target url, to make sure
+ */
 export type HealthCheckConfig<T extends StoreValuesForOneConfig = {}> = {
 	command: string | ((storeParameters: T) => string)
 } & ConfigWithStoreParameters<T>
 
+/**
+ * @Doc
+ * Display the output of some shell command every 10 seconds
+ */
 export type RepeatCommandConfig<T extends StoreValuesForOneConfig = {}> = {
 	command: string | ((storeParameters: T) => string)
 } & ConfigWithStoreParameters<T>
 
+/**
+ * @Doc
+ * Execute some javascript function at startup and display the output
+ */
 export type JavascriptFunctionConfig<T extends StoreValuesForOneConfig = {}> = {
 	func: ((storeParameters: T) => Promise<string> | string)
 } & ConfigWithStoreParameters<T>
 
+/**
+ * @Doc
+ * Form a persistent ssh tunnel to the target machine while dashboar is running
+ * ```
+ * {
+ *   TODO
+ * }
+ * ```
+ */
 export type SshTunnelConfig<T extends StoreValuesForOneConfig = {}> = {
 	command: string | ((storeParameters: T) => string)
 } & ConfigWithStoreParameters<T>
 
+/**
+ * @Doc
+ * Display a list of environment variables and their values
+ */
 export type WatchedEnvironmentVariablesConfig = string[]
 
+/**
+ * @Doc
+ * ```
+ *   Use this to clone a repository if it doesn't exist, and then show its branch
+ *   {
+ *     url: "https://github.com/marvinirwin/dashboar"
+ *   }
+ *
+ * ```
+ */
 export type RepositoryConfig<T extends StoreValuesForOneConfig = {}> = {
 	command: string | ((storeParameters: T) => string)
 } & ConfigWithStoreParameters<T>
