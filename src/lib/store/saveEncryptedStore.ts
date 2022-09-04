@@ -1,4 +1,4 @@
-import {StoreValues} from "./config";
+import {StoreValues} from "../config/config";
 import {encrypt} from "./encryptDecrypt";
 import {promises as fs} from "fs";
 import {encryptedStoreFilePath} from "./resolveStoreValues";

@@ -1,4 +1,4 @@
-import {SshTunnelConfig} from "../lib/config";
+import {SshTunnelConfig} from "../lib/config/config";
 import React from "react";
 import {DashboarPanel} from "./DashboarPanel";
 import { SshTunnel, SshTunnelProps } from "../components/SshTunnel";

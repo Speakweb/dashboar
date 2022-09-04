@@ -9,7 +9,7 @@ import {
 	StoreParameterObjectSchema,
 	StoreValues,
 	StringOrStringFunc
-} from "./config";
+} from "../config/config";
 import dotenv from "dotenv";
 import debug from 'debug';
 import {resolveStringFunc} from "./resolveStringFunc";
@@ -19,7 +19,7 @@ import {getSourcePromptType} from "./getSourcePromptType";
 import {StoreParameterConfiguration} from "./storeParameterConfiguration";
 import {resolveEncryptedStoreFile} from "./resolveEncryptedStoreFile";
 import {resolvePlainStoreFile} from "./resolvePlainStoreFile";
-import {DashboarConfig} from "./DashboarConfig";
+import {DashboarConfig} from "../config/DashboarConfig";
 
 
 const d = debug('resolve-store-values');
@@ -33,7 +33,7 @@ export const resolveAllStoreValues = async (
 	{
 		currentStore,
 		config: {
-			pullRequestConfigs,
+			bitBucketPullRequestConfigs,
 			repeatCommands,
 			sshTunnels,
 			postgresqlConnections,
@@ -42,7 +42,7 @@ export const resolveAllStoreValues = async (
 		cli,
 	}: { currentStore: StoreValues, config: DashboarConfig, cli: Interface }): Promise<StoreValues> => {
 	// @ts-ignore
-	const configLists: ConfigWithStoreParameters<{}>[] = flatten([pullRequestConfigs, repeatCommands, sshTunnels, postgresqlConnections, ...Object.values(others)]
+	const configLists: ConfigWithStoreParameters<{}>[] = flatten([bitBucketPullRequestConfigs, repeatCommands, sshTunnels, postgresqlConnections, ...Object.values(others)]
 		.filter(v => Boolean(v) && Boolean(v.storeParameters)));
 	const storeValueSchemas: StoreParameterConfiguration[] = flatten(configLists
 		.map((v: ConfigWithStoreParameters<{}>) => {

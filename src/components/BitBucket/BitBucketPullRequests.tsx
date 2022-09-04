@@ -1,10 +1,10 @@
-import {PullRequest, PullRequestList} from "./PullRequestList";
+import {PullRequest, BitBucketPullRequestList} from "./BitBucketPullRequestList";
 import {Text} from "ink";
 import React, {useEffect, useState} from "react";
 
 const ONE_MINUTE = 60000;
 
-export function PullRequests({fetchFunction}: {
+export function BitBucketPullRequests({fetchFunction}: {
     fetchFunction: () => Promise<PullRequest[]>
 }) {
     const [pullRequests, setPulLRequests] = useState<PullRequest[]>([]);
@@ -33,5 +33,5 @@ export function PullRequests({fetchFunction}: {
 	if (fetchingError) {
 		return <Text>{fetchingError}</Text>
 	}
-    return  <PullRequestList pullRequests={pullRequests}/>
+    return  <BitBucketPullRequestList pullRequests={pullRequests}/>
 }

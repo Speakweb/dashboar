@@ -11,7 +11,7 @@ export interface PullRequest {
 	}
 }
 
-export const PullRequestList: React.FC<{ pullRequests: PullRequest[] }> = ({pullRequests}) => {
+export const BitBucketPullRequestList: React.FC<{ pullRequests: PullRequest[] }> = ({pullRequests}) => {
 	return <>
 		{
 			pullRequests.map(({title, links: {html: {href}}}) => <Link key={title} url={href}> <Text>{title.trim()}</Text></Link>)

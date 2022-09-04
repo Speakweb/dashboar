@@ -1,5 +1,5 @@
 import {Interface} from "readline";
-import {StoreValues} from "./config";
+import {StoreValues} from "../config/config";
 import {getStorePassword} from "./getStorePassword";
 import {promises as fs} from "fs";
 import {decrypt} from "./encryptDecrypt";

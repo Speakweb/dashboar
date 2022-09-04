@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Text} from "ink";
 
-export const JavascriptFunction = ({ func, configKey }: {func: () => string | Promise<string>, configKey: string}) => {
+export const OneTimeJavascriptFunction = ({ func, configKey }: {func: () => string | Promise<string>, configKey: string}) => {
 	const [color, setColor] = useState('green');
 	const [output, setOutput] = useState('');
 	useEffect(() => {

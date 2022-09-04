@@ -1,12 +1,12 @@
-import {StoreValueType} from "../lib/config";
+import {StoreValueType} from "../lib/config/config";
 import React, {ReactElement} from "react";
 import {Box, Text} from "ink";
 
-export abstract class DashboarPanel<T> {
+export abstract class DashboarPanel<T, StoreValues = Record<string, StoreValueType>> {
 	protected configEntry: T;
-	protected storeEntry: Record<string, string | number>;
+	protected storeEntry: StoreValues;
 
-	constructor({configEntry, storeEntry}:{configEntry: T, storeEntry: Record<string, StoreValueType>}) {
+	constructor({configEntry, storeEntry}:{configEntry: T, storeEntry: StoreValues}) {
 		this.configEntry = configEntry;
 		this.storeEntry = storeEntry;
 	}

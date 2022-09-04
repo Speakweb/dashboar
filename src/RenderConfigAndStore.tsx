@@ -1,28 +1,30 @@
 import React from 'react';
-import RepeatCommand from './components/RepeatCommand';
-import {PullRequest} from './components/PullRequestList';
-import {PullRequests} from "./components/PullRequests";
+import RepeatCommand from './components/ShellCommands/RepeatCommand';
+import {PullRequest} from './components/BitBucketPullRequests/BitBucketPullRequestList';
+import {BitBucketPullRequests} from "./components/BitBucketPullRequests/BitBucketPullRequests";
 import {Box} from 'ink';
-import {StoreValues} from "./lib/config";
-import {PostgresqlConnectionPanel} from "./panels/PostgresqlConnectionPanel";
+import {StoreValues} from "./lib/config/config";
+import {PostgresConnectionParameters, PostgresqlConnectionPanel} from "./panels/PostgresqlConnectionPanel";
 import {RepositoryConnectionPanel} from "./panels/RepositoryConnectionPanel";
 import {SshTunnelPanel} from "./panels/SshTunnelPanel";
 import {EnvironmentVariablesPanel} from "./panels/EnvironmentVariablesPanel";
-import {DashboarConfig} from "./lib/DashboarConfig";
+import {DashboarConfig} from "./lib/config/DashboarConfig";
 import {HealthCheckPanel} from "./panels/HealthCheckPanel";
-import {JavascriptFunction} from './components/JavascriptFunction';
+import {OneTimeJavascriptFunction} from './components/OneTimeJavascriptFunction';
+import {GitSyncRemotesPanel, GitSyncRemotesStoreParams} from "./panels/GitSyncRemotesPanel";
 
-const Ui = (
+const RenderConfigAndStore = (
 		{
 			config: {
 				repeatCommands,
-				pullRequestConfigs,
+				bitBucketPullRequestConfigs,
 				sshTunnels,
-				healthChecks,
+				httpHealthChecks,
 				postgresqlConnections,
 				watchedEnvironmentVariables,
-				repositoryConfigs,
-				javascriptFunctions
+				clonedRepositoryConfigs,
+				oneTimeJavascriptFunctions,
+				syncedGitRemotes
 			},
 			pullRequestFetchFunction,
 			storeValues
@@ -49,10 +51,10 @@ const Ui = (
 				)
 			}
 			{
-				pullRequestConfigs?.map(({storeParameters}) => <Box
+				bitBucketPullRequestConfigs?.map(({storeParameters}) => <Box
 					key={`${storeParameters.workspace} ${storeParameters.repo}`}
 					borderStyle="single" flexDirection='column'>
-					<PullRequests
+					<BitBucketPullRequests
 						fetchFunction={pullRequestFetchFunction(storeParameters as unknown as { repo: string, workspace: string })}
 						key={`${storeParameters.repo} ${storeParameters.workspace}`}
 					/>
@@ -68,7 +70,7 @@ const Ui = (
 				)
 			}
 			{
-				healthChecks?.map((config, i) =>
+				httpHealthChecks?.map((config, i) =>
 					new HealthCheckPanel({
 						configEntry: config,
 						storeEntry: storeValues[config.configKey] || {}
@@ -79,12 +81,13 @@ const Ui = (
 				postgresqlConnections?.map((config, i) =>
 					new PostgresqlConnectionPanel({
 						configEntry: config,
-						storeEntry: storeValues[config.configKey] || {}
+						// TODO do real parameter validation
+						storeEntry: (storeValues[config.configKey] || {}) as PostgresConnectionParameters
 					}).Component({key: config.configKey || i})
 				)
 			}
 			{
-				repositoryConfigs?.map((config, i) =>
+				clonedRepositoryConfigs?.map((config, i) =>
 					new RepositoryConnectionPanel({
 						configEntry: config,
 						storeEntry: storeValues[config.configKey] || {}
@@ -92,16 +95,24 @@ const Ui = (
 				)
 			}
 			{
-				javascriptFunctions?.map((config, i) => <JavascriptFunction
+				oneTimeJavascriptFunctions?.map((config, i) => <OneTimeJavascriptFunction
 						key={i}
 						configKey={config.configKey}
 						func={() => config.func(storeValues[config.configKey] || {})}
 					/>
 				)
 			}
+			{
+				syncedGitRemotes?.map((config, i) => new GitSyncRemotesPanel(
+					{
+						configEntry: config,
+						storeEntry: (storeValues[config.configKey] || {}) as GitSyncRemotesStoreParams
+					}
+				).Component({key: i}))
+			}
 		</>
 ;
 
 
-module.exports = Ui;
-export default Ui;
+module.exports = RenderConfigAndStore;
+export default RenderConfigAndStore;

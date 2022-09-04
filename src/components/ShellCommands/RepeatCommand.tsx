@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Text} from "ink";
-import {execCommand} from "../lib/execCommand";
+import {execCommand} from "../../lib/util/execCommand";
 
 const TEN_SECONDS = 10000;
 export const RepeatCommand = ({command}: {command: string}) => {

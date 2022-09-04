@@ -1,3 +1,3 @@
-import {StoreParameterSchema} from "./config";
+import {StoreParameterSchema} from "../config/config";
 
 export type StoreParameterConfiguration = { storeParameterKey: string, storeParameterSchema: StoreParameterSchema, configKey: string };

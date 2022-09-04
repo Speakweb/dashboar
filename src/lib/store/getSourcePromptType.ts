@@ -1,4 +1,4 @@
-import {SourcePromptSchema, SourceSchema} from "./config";
+import {SourcePromptSchema, SourceSchema} from "../config/config";
 
 export const getSourcePromptType = (sourceSchema: SourceSchema) => ({
     sourceIsPromptString: typeof sourceSchema === 'string',

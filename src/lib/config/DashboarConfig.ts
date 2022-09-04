@@ -5,16 +5,23 @@ import {
 	RepeatCommandConfig,
 	SshTunnelConfig,
 	WatchedEnvironmentVariablesConfig,
-	RepositoryConfig, JavascriptFunctionConfig
+	RepositoryConfig, JavascriptFunctionConfig, GitSyncRemotesConfig
 } from "./config";
+
+export interface DashboarConfigElement {
+	type: keyof DashboarConfig,
+}
 
 export type DashboarConfig = {
 	repeatCommands?: RepeatCommandConfig[],
-	pullRequestConfigs?: BitbucketPrConfig[],
+	bitBucketPullRequestConfigs?: BitbucketPrConfig[],
 	sshTunnels?: SshTunnelConfig[],
-	healthChecks?: HealthCheckConfig[],
+	httpHealthChecks?: HealthCheckConfig[],
 	postgresqlConnections?: PostgresqlConnectionConfig[],
 	watchedEnvironmentVariables?: WatchedEnvironmentVariablesConfig[],
-	repositoryConfigs?: RepositoryConfig[]
-	javascriptFunctions?: JavascriptFunctionConfig[]
+	clonedRepositoryConfigs?: RepositoryConfig[]
+	oneTimeJavascriptFunctions?: JavascriptFunctionConfig[]
+	syncedGitRemotes?: GitSyncRemotesConfig[]
 };
+
+

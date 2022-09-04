@@ -128,3 +128,7 @@ export type RepositoryConfig<T extends StoreValuesForOneConfig = {}> = {
 	command: string | ((storeParameters: T) => string)
 } & ConfigWithStoreParameters<T>
 
+
+export type GitSyncRemotesConfig<T extends StoreValuesForOneConfig = {}> = {
+	command: string | ((storeParameters: T) => string)
+} & ConfigWithStoreParameters<T>

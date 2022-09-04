@@ -2,7 +2,7 @@ import {Interface} from "readline";
 import {readStoreFromPlainFile} from "./readStoreFromPlainFile";
 import {savePlaintextStore} from "./savePlaintextStore";
 import {plainStoreFilePath, resolveAllStoreValues} from "./resolveStoreValues";
-import {DashboarConfig} from "./DashboarConfig";
+import {DashboarConfig} from "../config/DashboarConfig";
 
 export async function resolvePlainStoreFile({
                                                 storeFileExists,

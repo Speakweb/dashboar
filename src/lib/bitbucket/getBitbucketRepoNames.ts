@@ -2,7 +2,7 @@
  * Accepts a repository object and returns a list of their names
  * @param response
  */
-const getRepositoryNames = (response: BitBucketResponse.RootObject): string[] => {
+const getBitbucketRepoNames = (response: BitBucketResponse.RootObject): string[] => {
 
 	let repositoryNames: string[] = []
 	response.data.values.forEach( repositoryObject => {
@@ -12,4 +12,4 @@ const getRepositoryNames = (response: BitBucketResponse.RootObject): string[] =>
 return repositoryNames
 }
 
-export default getRepositoryNames;
+export default getBitbucketRepoNames;

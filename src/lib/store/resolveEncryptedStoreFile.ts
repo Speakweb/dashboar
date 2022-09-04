@@ -3,7 +3,7 @@ import {readStoreFromEncryptedFile} from "./readStoreFromEncryptedFile";
 import {saveEncryptedStore} from "./saveEncryptedStore";
 import {getStorePassword} from "./getStorePassword";
 import {encryptedStoreFilePath, resolveAllStoreValues} from "./resolveStoreValues";
-import {DashboarConfig} from "./DashboarConfig";
+import {DashboarConfig} from "../config/DashboarConfig";
 
 export async function resolveEncryptedStoreFile(storeFileExists: boolean, cli: Interface, config: DashboarConfig) {
     if (storeFileExists) {

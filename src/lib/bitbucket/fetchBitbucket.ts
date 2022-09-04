@@ -1,4 +1,4 @@
-import {PullRequest} from "../components/PullRequestList";
+import {PullRequest} from "../../components/BitBucketPullRequests/BitBucketPullRequestList";
 
 const {Bitbucket} = require("bitbucket");
 const clientOptions = {

@@ -23,7 +23,7 @@ export const getConfigFile = async () => {
     const configFilePath = commandArgs[configFileIdx + 1] || "./dashboar-config";
     const regex = new RegExp("^(http|https)://", "i");
 
-	let configFile: DashboarConfig;
+	let configFile: DashboarConfig ;
     try {
         if (regex.test(configFilePath)) {
             configFile = await getFileFromUrl(configFilePath);
