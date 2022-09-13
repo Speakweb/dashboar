@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import React from 'react';
 import {render} from 'ink';
-import RenderConfigAndStore from './RenderConfigAndStore';
+import RenderConfigWithStore from './RenderConfigWithStore';
 import {fetchPullRequests} from "./lib/bitbucket/fetchBitbucket";
 import { resolveStoreValues } from './lib/store/resolveStoreValues';
 import {DashboarConfig} from "./lib/config/DashboarConfig";
@@ -14,7 +14,7 @@ const runCLI = async () => {
 
 	const storeValues = await resolveStoreValues({config: loadedConfiguration, storeFileIsEncrypted});
 
-	render(<RenderConfigAndStore
+	render(<RenderConfigWithStore
 		config={loadedConfiguration}
 		storeValues={storeValues}
 		pullRequestFetchFunction={config => () => fetchPullRequests(config)}

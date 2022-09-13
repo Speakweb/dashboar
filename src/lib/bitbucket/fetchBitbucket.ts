@@ -1,4 +1,4 @@
-import {PullRequest} from "../../components/BitBucketPullRequests/BitBucketPullRequestList";
+import {BitBucketPullRequest} from "../../components/BitBucket/BitBucketPullRequestList";
 
 const {Bitbucket} = require("bitbucket");
 const clientOptions = {
@@ -10,7 +10,7 @@ const clientOptions = {
 
 const getBitbucket = () => new Bitbucket(clientOptions);
 
-export const fetchPullRequests = ({repo, workspace}: {repo: string, workspace: string}): Promise<PullRequest[]> => {
+export const fetchPullRequests = ({repo, workspace}: {repo: string, workspace: string}): Promise<BitBucketPullRequest[]> => {
 	return getBitbucket().pullrequests.list({repo_slug: repo, workspace})
 		.then((result: any)  => result.data.values)
 }

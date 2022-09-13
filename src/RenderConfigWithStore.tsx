@@ -1,7 +1,5 @@
 import React from 'react';
 import RepeatCommand from './components/ShellCommands/RepeatCommand';
-import {PullRequest} from './components/BitBucketPullRequests/BitBucketPullRequestList';
-import {BitBucketPullRequests} from "./components/BitBucketPullRequests/BitBucketPullRequests";
 import {Box} from 'ink';
 import {StoreValues} from "./lib/config/config";
 import {PostgresConnectionParameters, PostgresqlConnectionPanel} from "./panels/PostgresqlConnectionPanel";
@@ -12,8 +10,10 @@ import {DashboarConfig} from "./lib/config/DashboarConfig";
 import {HealthCheckPanel} from "./panels/HealthCheckPanel";
 import {OneTimeJavascriptFunction} from './components/OneTimeJavascriptFunction';
 import {GitSyncRemotesPanel, GitSyncRemotesStoreParams} from "./panels/GitSyncRemotesPanel";
+import {BitBucketPullRequest} from "./components/BitBucket/BitBucketPullRequestList";
+import { BitBucketPullRequests } from './components/BitBucket/BitBucketPullRequests';
 
-const RenderConfigAndStore = (
+const RenderConfigWithStore = (
 		{
 			config: {
 				repeatCommands,
@@ -34,7 +34,7 @@ const RenderConfigAndStore = (
 										   repo,
 										   workspace
 									   }: { repo: string, workspace: string }
-			) => () => Promise<PullRequest[]>,
+			) => () => Promise<BitBucketPullRequest[]>,
 			storeValues: StoreValues,
 
 		}
@@ -114,5 +114,5 @@ const RenderConfigAndStore = (
 ;
 
 
-module.exports = RenderConfigAndStore;
-export default RenderConfigAndStore;
+module.exports = RenderConfigWithStore;
+export default RenderConfigWithStore;
