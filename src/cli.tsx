@@ -21,4 +21,6 @@ const runCLI = async () => {
 	/>);
 }
 
-runCLI();
+runCLI()
+	.then(() => console.log('done'))
+	.catch(error => console.error(error));

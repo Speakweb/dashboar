@@ -38,8 +38,8 @@ const RenderConfigWithStore = (
 			storeValues: StoreValues,
 
 		}
-	) =>
-		<>
+	) => {
+		return <>
 			{
 				watchedEnvironmentVariables?.map((variableList: string[], index: number) => new EnvironmentVariablesPanel(variableList).Component({key: index}))
 			}
@@ -103,14 +103,17 @@ const RenderConfigWithStore = (
 				)
 			}
 			{
-				syncedGitRemotes?.map((config, i) => new GitSyncRemotesPanel(
-					{
-						configEntry: config,
-						storeEntry: (storeValues[config.configKey] || {}) as GitSyncRemotesStoreParams
-					}
-				).Component({key: i}))
+				syncedGitRemotes?.map((config, i) => {
+					return new GitSyncRemotesPanel(
+						{
+							configEntry: config,
+							storeEntry: (storeValues[config.configKey] || {}) as GitSyncRemotesStoreParams
+						}
+					).Component({key: i});
+				})
 			}
-		</>
+		</>;
+	}
 ;
 
 

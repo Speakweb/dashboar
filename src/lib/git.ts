@@ -1,30 +1,59 @@
 import simplegit from "simple-git";
 import * as fs from "fs/promises";
 import * as constants from "constants";
+import {exec} from 'child_process';
 
-export const copyRepo = async function (repoPath: string, originUrl: string, sourceUrl: string) {
-    const git = simplegit(repoPath);
-    await git.remote(["set-url", "origin", originUrl]);
-    await git.addRemote('source', sourceUrl);
-    const branches = (await git.branch()).all .filter(b => b.startsWith("remotes/origin/")) .map(b => b.replace("remotes/origin/", ""));
-    for (const branch of branches) {
-        await git.checkout(branch);
-        await git.push();
-        console.log("Pushed " + branch);
-    }
+
+export const execPromise = (command: string) => new Promise((resolve, reject) => {
+	console.log(command);
+	exec(command, (error, stdout, stderr) => {
+		if (error) {
+			reject(error.message)
+			return;
+		}
+		if (stderr) {
+			console.warn(stderr)
+		}
+		resolve(stdout)
+	})
+})
+
+
+
+// @ts-ignore
+export const copyRepo = async function (repoPath: string, originUrl: string, sourceUrl: string, branches: string[]) {
+// @ts-ignore
+	try {
+		await execPromise(`git -C "${repoPath}" remote set-url origin ${originUrl}`);
+	} catch (e) {
+		console.warn(e)
+	}
+	try {
+		await execPromise(`git -C "${repoPath}" remote add source ${sourceUrl}`);
+	} catch (e) {
+		console.warn(e)
+	}
+	for (const branch of branches) {
+		await execPromise(`git -C ${repoPath} fetch source ${branch}`)
+		await execPromise(`git -C ${repoPath} checkout -b ${branch}`);
+		await execPromise(`git -C ${repoPath} checkout ${branch}`);
+		await execPromise(`git -C ${repoPath} reset source/${branch}`);
+		let message = await execPromise(`git -C "${repoPath}" push origin ${branch}`);
+		console.log(message)
+	}
 };
 
-export const cloneRepo = async function (url: string) {
-    const name = getRepoName(url);
-    const exists = await fileExists(name);
-    if (exists) {
-        await fs.rm(name, {recursive: true});
-    }
-    await simplegit().clone(url, process.cwd() + "/" + name);
+export const cloneRepo = async function (url: string, destPath: string) {
+	const name = getRepoName(url);
+	const exists = await fileExists(name);
+	if (exists) {
+		await fs.rm(name, {recursive: true});
+	}
+	await simplegit().clone(url, destPath);
 }
 
 export const getRepoName = (url: string): string => {
-    const match = /(.*\/)(?<reponame>.*?)(?:\.git)?$/.exec(url)?.groups?.["reponame"];
+	const match = /(.*\/)(?<reponame>.*?)(?:\.git)?$/.exec(url)?.groups?.["reponame"];
 	if (!match) {
 		throw new Error("Repository name cannot be empty.");
 	}
